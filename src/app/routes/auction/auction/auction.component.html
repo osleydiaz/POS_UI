@@ -1,4 +1,4 @@
-<div class="content-heading" style="text-align:center;">
+<div class="content-heading" style="text-align:center;"  (window:keydown)="keyDown($event)">
   <span  style="display:block;position:absolute;left:10;"> Auction</span>
    <span style="display:inline-block;">
         <div class="btn-group">
@@ -42,7 +42,7 @@
                 <label class="sr-only" for="input-lastname">Last Name</label>
                 <input class="form-control" id="input-lastname" type="text" disabled placeholder="Last Name" />
             </div>
-            <button class="btn btn-primary" type="submit" (click)="toggleOffsidebar()"><i class="fa fa-gavel"></i> Sale</button>
+            <button class="btn btn-primary" type="submit"><i class="fa fa-gavel"></i> Sale</button>
         </form>
     </div>
 </div>
@@ -54,7 +54,7 @@
         <div class="row">
             <div class="col-md-4">
                 <p class="lead bb">Image</p>
-                <img style="max-height:100%; max-width:100%;" fallback-src="http://artimages.parkwestgallery.com/Misc/not_available.png" src="http://artimages.parkwestgallery.com/main/10/im349310.jpg">
+                <img style="max-height:100%; max-width:100%;" onError="this.src='assets/img/not_available.png'" src="http://artimages.parkwestgallery.com/main/10/im349310.jpg">
             </div>
             <div class="col-md-4">
                 <p class="lead bb">Details</p>
@@ -67,6 +67,10 @@
                            <p>p20'' x 24''</p>
                            <p>
 Digital multiple on aluminum through dye sublimation. Hand-signed in ink center right by the artist. From the Arabic numbered edition of 450 examples (130 Arabic numbered European artist proofs, 130 Arabic numbered artist proofs, 130 Arabic numbered hors commerce proofs, 130 Arabic numbered printer proofs, and 3 Arabic numbered bon a tirer proofs also exist).
+                           </p>
+                           <p>
+                             <small><b>*** You may sell multiples. You are not allowed to have the client take the work from the ship.</b> </small>     
+
                            </p>
                         </div>
                     </div>                

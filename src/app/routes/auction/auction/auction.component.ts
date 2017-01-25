@@ -21,8 +21,11 @@ export class AuctionComponent implements OnInit {
 
    constructor( private settings: SettingsService) { }
 
-   toggleOffsidebar() {
-        this.settings.layout.offsidebarOpen = !this.settings.layout.offsidebarOpen;
+   keyDown($event) {
+     $event.preventDefault();
+     console.log($event);
+      if($event.code == "Escape")
+          this.settings.layout.offsidebarOpen = !this.settings.layout.offsidebarOpen;
     }
 
   ngOnInit() {

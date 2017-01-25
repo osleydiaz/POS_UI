@@ -1,133 +1,16 @@
-<h3 class="text-center text-thin"  [innerHTML]="'offsidebar.setting.SETTINGS' | translate"></h3>
+<h3 class="text-center text-thin">Auctioneer Assistant</h3>
 <div class="p">
-    <h4 class="text-muted text-thin">Themes</h4>
-    <div class="table-grid mb">
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="A" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-info"></span>
-                    <span class="color bg-info-light"></span>
-                    </span>
-                    <span class="color bg-white"></span>
-                </label>
-            </div>
-        </div>
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="B" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-green"></span>
-                    <span class="color bg-green-light"></span>
-                    </span>
-                    <span class="color bg-white"></span>
-                </label>
-            </div>
-        </div>
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="C" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-purple"></span>
-                    <span class="color bg-purple-light"></span>
-                    </span>
-                    <span class="color bg-white"></span>
-                </label>
-            </div>
-        </div>
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="D" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-danger"></span>
-                    <span class="color bg-danger-light"></span>
-                    </span>
-                    <span class="color bg-white"></span>
-                </label>
-            </div>
-        </div>
-    </div>
-    <div class="table-grid mb">
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="E" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-info-dark"></span>
-                    <span class="color bg-info"></span>
-                    </span>
-                    <span class="color bg-gray-dark"></span>
-                </label>
-            </div>
-        </div>
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="F" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-green-dark"></span>
-                    <span class="color bg-green"></span>
-                    </span>
-                    <span class="color bg-gray-dark"></span>
-                </label>
-            </div>
-        </div>
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="G" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-purple-dark"></span>
-                    <span class="color bg-purple"></span>
-                    </span>
-                    <span class="color bg-gray-dark"></span>
-                </label>
-            </div>
-        </div>
-        <div class="col mb">
-            <div class="setting-color">
-                <label>
-                    <input type="radio" name="setting-theme" [(ngModel)]="currentTheme" (ngModelChange)="setTheme()" value="H" />
-                    <span class="icon-check"></span>
-                    <span class="split">
-                  <span class="color bg-danger-dark"></span>
-                    <span class="color bg-danger"></span>
-                    </span>
-                    <span class="color bg-gray-dark"></span>
-                </label>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="p">
-    <h4 class="text-muted text-thin">Layout</h4>
+    <h4 class="text-muted text-thin">Framed Pricing</h4>
     <div class="clearfix">
-        <p class="pull-left">Fixed</p>
+        <p class="pull-left">Price</p>
         <div class="pull-right">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="settings.layout.isFixed"/>
-                <span></span>
-            </label>
+           <b>$1290.00</b>
         </div>
     </div>
     <div class="clearfix">
-        <p class="pull-left">Boxed</p>
+        <p class="pull-left">Your are not allowed to bid on behalf of the house at or above</p>
         <div class="pull-right">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="settings.layout.isBoxed"/>
-                <span></span>
-            </label>
+            <b>$1940.00</b>
         </div>
     </div>
     <!--
@@ -143,70 +26,24 @@
     -->
 </div>
 <div class="p" *ngIf="!settings.layout.horizontal">
-    <h4 class="text-muted text-thin">Aside</h4>
+    <h4 class="text-muted text-thin">Sales Goals</h4>
     <div class="clearfix">
-        <p class="pull-left">Collapsed</p>
+         <p class="pull-left">Amount Sold</p>
         <div class="pull-right">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="settings.layout.isCollapsed" [disabled]="settings.layout.isCollapsedText"/>
-                <span></span>
-            </label>
+           <b>$5470.00</b>
         </div>
     </div>
     <div class="clearfix">
-        <p class="pull-left">Collapsed Text</p>
+         <p class="pull-left">Goal 2 Reached!</p>
         <div class="pull-right">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="settings.layout.isCollapsedText" [disabled]="settings.layout.isCollapsed"/>
-                <span></span>
-            </label>
+           <b>$0.00</b>
         </div>
     </div>
     <div class="clearfix">
-        <p class="pull-left">Float</p>
+         <p class="pull-left">Goal 1 Reached!</p>
         <div class="pull-right">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="settings.layout.isFloat"/>
-                <span></span>
-            </label>
-        </div>
-    </div>
-    <div class="clearfix">
-        <p class="pull-left">Hover</p>
-        <div class="pull-right">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="settings.layout.asideHover"/>
-                <span></span>
-            </label>
-        </div>
-    </div>
-    <div class="clearfix">
-        <p class="pull-left">Show Scrollbar</p>
-        <div class="pull-right">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="settings.layout.asideScrollbar"/>
-                <span></span>
-            </label>
+           <b>$0.00</b>
         </div>
     </div>
 </div>
-<!-- <div class="p">
-    <h4 class="text-muted text-thin">View Animation</h4>
-    <select class="form-control" [(ngMmodel)]="settings.viewAnimation">
-        <option value="ng-fadeInUp" selected="selected">fadeInUp</option>
-        <option value="ng-fadeInDown">fadeInDown</option>
-        <option value="ng-fadeInRight">fadeInRight</option>
-        <option value="ng-fadeInLeft">fadeInLeft</option>
-        <option value="ng-fadeInUpBig">fadeInUpBig</option>
-        <option value="ng-fadeInDownBig">fadeInDownBig</option>
-        <option value="ng-fadeInRightBig">fadeInRightBig</option>
-        <option value="ng-fadeInLeftBig">fadeInLeftBig</option>
-        <option value="ng-fadeIn">fadeIn</option>
-    </select>
-</div> -->
-<div class="p">
-    <h4 class="text-muted text-thin">Language</h4>
-    <select class="form-control" [ngModel]="selectedLanguage" (ngModelChange)="setLang($event)">
-        <option [value]="lang.code" *ngFor="let lang of getLangs()">{{lang.text}}</option>
-    </select>
-</div>
+
