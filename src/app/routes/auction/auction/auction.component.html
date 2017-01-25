@@ -1,0 +1,96 @@
+<div class="content-heading" style="text-align:center;">
+  <span  style="display:block;position:absolute;left:10;"> Auction</span>
+   <span style="display:inline-block;">
+        <div class="btn-group">
+             <ng-select [allowClear]="true" [items]="items" placeholder="Search Reg#,Ser#,Artist   "></ng-select>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> F1</button>
+            <button class="btn btn-default" type="button"><i class="fa fa-angle-double-left"></i> F2</button>
+            <button class="btn btn-default" type="button"> F3 <i class="fa fa-angle-right"></i></button>
+            <button class="btn btn-default" type="button">F4 <i class="fa fa-angle-double-right"></i></button>
+        </div>
+         <div class="btn-group">
+             <button class="btn btn-default" type="button"> F7-Browse <i class="fa fa-search"></i></button>
+        </div>
+   </span>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading text-center" style="font-size:18px;">
+        <strong>CP  005</strong>
+        <span style="padding: 0 20px">Michael Cheval</span>
+        <!--<span>Discord of Analogy</span>-->
+        <span  style="padding: 0 20px">349310.0772</span>
+         <span style="padding: 0 20px"> Estimated Retail Price: <b>$2375.00</b></span>
+         <div class="label label-success pull-left">Active</div>
+    </div>
+    <div class="panel-body">
+        <form class="form-inline text-center" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="input-price">Price</label>
+                <input class="form-control" id="input-price" type="number" placeholder="Price" style="width:120px"/>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="input-bidder">Bidder #</label>
+                <input class="form-control" id="input-bidder" type="number" placeholder="Bidder #" style="width:120px"/>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="input-name">Name</label>
+                <input class="form-control" id="input-name" type="text" disabled placeholder="Name" />
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="input-lastname">Last Name</label>
+                <input class="form-control" id="input-lastname" type="text" disabled placeholder="Last Name" />
+            </div>
+            <button class="btn btn-primary" type="submit" (click)="toggleOffsidebar()"><i class="fa fa-gavel"></i> Sale</button>
+        </form>
+    </div>
+</div>
+<div class="panel b">
+    <div class="panel-heading">
+        <!--<h4> CUSTOMER REGISTRATION</h4>-->
+    </div>
+    <div class="panel-body" style="padding-top:0">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="lead bb">Image</p>
+                <img style="max-height:100%; max-width:100%;" fallback-src="http://artimages.parkwestgallery.com/Misc/not_available.png" src="http://artimages.parkwestgallery.com/main/10/im349310.jpg">
+            </div>
+            <div class="col-md-4">
+                <p class="lead bb">Details</p>
+                <form class="form-horizontal p-20">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                           <p>Cheval, Michael </p>
+                           <p>Discord of Analogy</p>
+                           <p>2015</p>
+                           <p>p20'' x 24''</p>
+                           <p>
+Digital multiple on aluminum through dye sublimation. Hand-signed in ink center right by the artist. From the Arabic numbered edition of 450 examples (130 Arabic numbered European artist proofs, 130 Arabic numbered artist proofs, 130 Arabic numbered hors commerce proofs, 130 Arabic numbered printer proofs, and 3 Arabic numbered bon a tirer proofs also exist).
+                           </p>
+                        </div>
+                    </div>                
+                </form>
+            </div>
+            <div class="col-md-4">
+                <p class="lead bb">Artist Biography</p>
+                <form class="form-horizontal p-20">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <p>
+                    Michael Cheval was born in 1966 in Kotelnikovo, a small town in southern Russia.  He grew up among paints and brushes, canvases and easels.  His grandfather, a professional artist and sculptor, developed Michael?s love for drawing in his early childhood.
+
+In 1980, Michael moved with his family to Germany.  His new setting made a great impression on the young artist.  Museums and castles, ancient streets and wonderful landscapes of southern Germany permanently defined Michael?s tastes.
+
+After moving to Turkmenistan in 1886, he took formal training at the Ashgabad School of Fine Arts and focused on his lifelong style of what some would call surrealism, but which he calls ?Absurdism.?
+He considers absurdity as a game of imagination, where all ties are chosen to construct a literary plot.  His work includes metaphorical references and the viewer is challenged to find the often hidden allusions.
+
+His decision to immigrate in 1997 to United States began a productive era for Michael.  He returned to the Western culture that greatly inspired him in his youth, but now he brought his own experience, his philosophy and vision.
+                            </p>
+                        </div>
+                    </div>                
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
