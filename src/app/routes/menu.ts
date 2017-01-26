@@ -5,7 +5,11 @@ const Home = {
     icon: 'icon-home'
 };
 
-
+const Customer = {
+    text: 'Customer Registration',
+    link: '/customer',
+    icon: 'fa fa-user-plus'
+};
 const Auction = {
     text: 'Auction Program',
     link: '/auction',
@@ -432,6 +436,7 @@ const headingMore = {
 
 export const menu = [
     Home,
+    Customer,
     Auction,
     Invoicing,
     ElectronicGallery,

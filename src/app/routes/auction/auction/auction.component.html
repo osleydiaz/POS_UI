@@ -2,13 +2,13 @@
   <span  style="display:block;position:absolute;left:10;"> Auction</span>
    <span style="display:inline-block;">
         <div class="btn-group">
-             <ng-select [allowClear]="true" [items]="items" placeholder="Search Reg#,Ser#,Artist   "></ng-select>
-        </div>
-        <div class="btn-group">
             <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> F1</button>
             <button class="btn btn-default" type="button"><i class="fa fa-angle-double-left"></i> F2</button>
             <button class="btn btn-default" type="button"> F3 <i class="fa fa-angle-right"></i></button>
             <button class="btn btn-default" type="button">F4 <i class="fa fa-angle-double-right"></i></button>
+        </div>
+         <div class="btn-group">
+             <ng-select [allowClear]="true" [items]="items" placeholder="Search Reg#,Ser#,Artist ... " ng-attr-size="300"></ng-select>
         </div>
          <div class="btn-group">
              <button class="btn btn-default" type="button"> F7-Browse <i class="fa fa-search"></i></button>
@@ -17,7 +17,7 @@
 </div>
 <div class="panel panel-default">
     <div class="panel-heading text-center" style="font-size:18px;">
-        <strong>CP  005</strong>
+        <strong style="padding: 0 20px"> CP  005</strong>
         <span style="padding: 0 20px">Michael Cheval</span>
         <!--<span>Discord of Analogy</span>-->
         <span  style="padding: 0 20px">349310.0772</span>
