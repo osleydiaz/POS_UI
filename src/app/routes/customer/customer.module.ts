@@ -17,8 +17,8 @@ const routes: Routes = [
         SharedModule,
         RouterModule.forChild(routes),
         // DataTableModule,
-        Ng2TableModule,
-        //AgGridModule.withComponents([AngulargridComponent])
+        //Ng2TableModule,
+        AgGridModule.withComponents([ListComponent])
     ],
     declarations: [
         ListComponent

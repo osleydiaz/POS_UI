@@ -1,8 +1,16 @@
 @import '../../../shared/styles/app/variables.scss';
 @import '../../../shared/styles/app/media-queries.scss';
 
-table.table tbody tr{
-    max-height:30px;
+.customer-table tbody tr{
+    max-height:40px;
+    height:30px;
     min-height: 20px;
-color: red;
 }
+
+
+.customer-table .form-control{
+    max-width:auto;
+    min-width:auto;
+    width:auto;
+}
+

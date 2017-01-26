@@ -1,168 +1,106 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { GridOptions } from 'ag-grid/main';
 import { Http } from '@angular/http';
 import * as _ from 'lodash';
-
-import { TableData } from './customer-table-data';
+declare var $: any;
 
 @Component({
-    selector: 'app-list',
+    selector: 'app-angulargrid',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
 
-    private singleData;
+    resizeEvent = 'resize.ag-grid';
+    $win = $(window);
 
-    constructor(private http: Http) {
-        // angular2-datatable
-        http.get('assets/server/datatable.json')
-            .subscribe((data) => {
-                setTimeout(() => {
-                    this.singleData = data.json();
-                }, 1000);
-            });
+    gridOptions: GridOptions;
 
-        // ng2Table
-        this.length = this.ng2TableData.length;
 
-    }
+    // Filter Example
+    irishAthletes = ['John Joe Nevin', 'Katie Taylor', 'Paddy Barnes', 'Kenny Egan', 'Darren Sutherland', 'Margaret Thatcher', 'Tony Blair', 'Ronald Regan', 'Barack Obama'];
+    // {
+    //     headerName: 'Athlete',
+    //     field: 'athlete',
+    //     width: 150,
+    //     filter: 'set',
+    //     filterParams: {
+    //         cellHeight: 20,
+    //         values: this.irishAthletes
+    //     }
+    // },
 
-    // angular2-datatable
-    // private sortByWordLength = (a: any) => {
-    //     return a.name.length;
-    // }
-
-    public removeItem(item: any) {
-        this.singleData = _.filter(this.singleData, (elem) => elem != item);
-        console.log('Remove: ', item.email);
-    }
-
-    // ng2Table
-
-    public rows: Array<any> = [];
-    public columns: Array<any> = [
-        { title: 'Name', name: 'name', filtering: { filterString: '', placeholder: 'Filter by name' } },
-        {
-            title: 'Position',
-            name: 'position',
-            sort: false,
-            filtering: { filterString: '', placeholder: 'Filter by position' }
-        },
-        { title: 'Office', className: ['office-header', 'text-success'], name: 'office', sort: 'asc' },
-        { title: 'Extn.', name: 'ext', sort: '', filtering: { filterString: '', placeholder: 'Filter by extn.' } },
-        { title: 'Start date', className: 'text-warning', name: 'startDate' },
-        { title: 'Salary ($)', name: 'salary' }
-    ];
-    public page: number = 1;
-    public itemsPerPage: number = 10;
-    public maxSize: number = 5;
-    public numPages: number = 1;
-    public length: number = 0;
-
-    public config: any = {
-        paging: true,
-        sorting: { columns: this.columns },
-        filtering: { filterString: '' },
-        className: ['table-striped', 'table-bordered', 'mb0', 'd-table-fixed'] // mb0=remove margin -/- .d-table-fixed=fix column width
+    hasInvoiceRenderer = function(params) {
+        var hasInvoice = params.value;
+        if(hasInvoice)
+            return "<i class='fa fa-check text-success'></i>";
+        else
+            return "<i class='fa fa-close text-danger'></i>"
     };
 
-    private ng2TableData: Array<any> = TableData;
 
-    public ngOnInit(): void {
-        this.onChangeTable(this.config);
-    }
+    columnDefsFilter = [ 
+         {headerName: 'Bid#',field: 'bidNum',width: 80}, 
+        {headerName: 'Session#',field: 'ext',width: 115}, 
+        {headerName: 'Name',field: 'name',width: 150}, 
+        {headerName: 'Last Name',field: 'lastName'}, 
+        {headerName: 'City',field: 'city',width: 150}, 
+        {headerName: 'State',field: 'state',width: 90}, 
+        {headerName: 'Home Phone',field: 'homePhone',width: 150}, 
+        {headerName: 'Work Phone',field: 'workPhone',width: 150}, 
+        {headerName: 'Last Registered',field: 'lastRegistered',width: 150}, 
+        {headerName: 'Cabin',field: 'cabin',width: 90}, 
+        {headerName: 'Invoiced',field: 'hasInvoice',width:  100, cellRenderer: this.hasInvoiceRenderer}
+    ];  
 
-    public changePage(page: any, data: Array<any> = this.ng2TableData): Array<any> {
-        let start = (page.page - 1) * page.itemsPerPage;
-        let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
-        return data.slice(start, end);
-    }
+    
+    
 
-    public changeSort(data: any, config: any): any {
-        if (!config.sorting) {
-            return data;
-        }
+    constructor(http: Http) {     
 
-        let columns = this.config.sorting.columns || [];
-        let columnName: string = void 0;
-        let sort: string = void 0;
-
-        for (let i = 0; i < columns.length; i++) {
-            if (columns[i].sort !== '' && columns[i].sort !== false) {
-                columnName = columns[i].name;
-                sort = columns[i].sort;
-            }
-        }
-
-        if (!columnName) {
-            return data;
-        }
-
-        // simple sorting
-        return data.sort((previous: any, current: any) => {
-            if (previous[columnName] > current[columnName]) {
-                return sort === 'desc' ? -1 : 1;
-            } else if (previous[columnName] < current[columnName]) {
-                return sort === 'asc' ? -1 : 1;
-            }
-            return 0;
-        });
-    }
-
-    public changeFilter(data: any, config: any): any {
-
-        let filteredData: Array<any> = data;
-        this.columns.forEach((column: any) => {
-            if (column.filtering) {
-                filteredData = filteredData.filter((item: any) => {
-                    return item[column.name].match(column.filtering.filterString);
+        // Filter example
+        this.gridOptions = <GridOptions>{
+            columnDefs: this.columnDefsFilter,
+            rowData: null,
+            enableFilter: true,
+            rowSelection: 'single',
+            gridReady: (params) => {
+                params.api.sizeColumnsToFit();
+                this.$win.on(this.resizeEvent, () => {
+                    setTimeout(() => { params.api.sizeColumnsToFit(); });
                 });
             }
-        });
+        };
 
-        if (!config.filtering) {
-            return filteredData;
-        }
-
-        if (config.filtering.columnName) {
-            return filteredData.filter((item: any) =>
-                item[config.filtering.columnName].match(this.config.filtering.filterString));
-        }
-
-        let tempArray: Array<any> = [];
-        filteredData.forEach((item: any) => {
-            let flag = false;
-            this.columns.forEach((column: any) => {
-                if (item[column.name].toString().match(this.config.filtering.filterString)) {
-                    flag = true;
-                }
+      
+        http.get('assets/server/ag-customers.json')
+            .subscribe((data) => {
+                this.gridOptions.api.setRowData(data.json());
+                this.gridOptions.api.sizeColumnsToFit();
             });
-            if (flag) {
-                tempArray.push(item);
-            }
-        });
-        filteredData = tempArray;
-
-        return filteredData;
     }
 
-    public onChangeTable(config: any, page: any = { page: this.page, itemsPerPage: this.itemsPerPage }): any {
-        if (config.filtering) {
-            (<any>Object).assign(this.config.filtering, config.filtering);
-        }
+    
 
-        if (config.sorting) {
-            (<any>Object).assign(this.config.sorting, config.sorting);
-        }
+     private onQuickFilterChanged($event) {
+         this.gridOptions.api.setQuickFilter($event.target.value);
+     }
 
-        let filteredData = this.changeFilter(this.ng2TableData, this.config);
-        let sortedData = this.changeSort(filteredData, this.config);
-        this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
-        this.length = sortedData.length;
+
+    ngOnInit() { }
+
+    ngOnDestroy() {
+        this.$win.off(this.resizeEvent);
     }
 
-    public onCellClick(data: any): any {
-        console.log(data);
+    cellDoubleClicked($event){
+         alert($event.data);
+    }
+
+    onSelectionChanged = function($event) {
+        var selectedRows =  this.gridOptions.api.getSelectedRows();
+        if(selectedRows.length > 0)
+            console.log(selectedRows[0]);
     }
 
 }
