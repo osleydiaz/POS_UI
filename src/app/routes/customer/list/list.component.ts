@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GridOptions } from 'ag-grid/main';
 import { Http } from '@angular/http';
+
+import {CustomerComponent} from '../customer/customer.component';
+
 import * as _ from 'lodash';
 declare var $: any;
 
 @Component({
     selector: 'app-angulargrid',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit, OnDestroy {
 
@@ -16,9 +19,8 @@ export class ListComponent implements OnInit, OnDestroy {
 
     gridOptions: GridOptions;
 
-
     // Filter Example
-    irishAthletes = ['John Joe Nevin', 'Katie Taylor', 'Paddy Barnes', 'Kenny Egan', 'Darren Sutherland', 'Margaret Thatcher', 'Tony Blair', 'Ronald Regan', 'Barack Obama'];
+    //irishAthletes = ['John Joe Nevin', 'Katie Taylor', 'Paddy Barnes', 'Kenny Egan', 'Darren Sutherland', 'Margaret Thatcher', 'Tony Blair', 'Ronald Regan', 'Barack Obama'];
     // {
     //     headerName: 'Athlete',
     //     field: 'athlete',
@@ -38,9 +40,8 @@ export class ListComponent implements OnInit, OnDestroy {
             return "<i class='fa fa-close text-danger'></i>"
     };
 
-
     columnDefsFilter = [ 
-         {headerName: 'Bid#',field: 'bidNum',width: 80}, 
+        {headerName: 'Bid#',field: 'bidNum',width: 80}, 
         {headerName: 'Session#',field: 'ext',width: 115}, 
         {headerName: 'Name',field: 'name',width: 150}, 
         {headerName: 'Last Name',field: 'lastName'}, 
@@ -53,10 +54,9 @@ export class ListComponent implements OnInit, OnDestroy {
         {headerName: 'Invoiced',field: 'hasInvoice',width:  100, cellRenderer: this.hasInvoiceRenderer}
     ];  
 
-    
-    
-
     constructor(http: Http) {     
+
+        //this.customerComponent = <CustomerComponent>{};
 
         // Filter example
         this.gridOptions = <GridOptions>{
@@ -80,8 +80,6 @@ export class ListComponent implements OnInit, OnDestroy {
             });
     }
 
-    
-
      private onQuickFilterChanged($event) {
          this.gridOptions.api.setQuickFilter($event.target.value);
      }
@@ -94,7 +92,8 @@ export class ListComponent implements OnInit, OnDestroy {
     }
 
     cellDoubleClicked($event){
-         alert($event.data);
+       //classicModal.show();
+       console.log($event.data);
     }
 
     onSelectionChanged = function($event) {
@@ -102,5 +101,4 @@ export class ListComponent implements OnInit, OnDestroy {
         if(selectedRows.length > 0)
             console.log(selectedRows[0]);
     }
-
 }

@@ -6,6 +6,8 @@ import { AgGridModule } from 'ag-grid-ng2/main';
 
 import { SharedModule } from '../../shared/shared.module';
 import { ListComponent } from './list/list.component';
+import {CustomerComponent} from './customer/customer.component';
+
 
 
 const routes: Routes = [
@@ -16,12 +18,11 @@ const routes: Routes = [
     imports: [
         SharedModule,
         RouterModule.forChild(routes),
-        // DataTableModule,
-        //Ng2TableModule,
         AgGridModule.withComponents([ListComponent])
     ],
     declarations: [
-        ListComponent
+        ListComponent,
+        CustomerComponent
     ],
     exports: [
         RouterModule

@@ -11,4 +11,10 @@
         <button class="mb form-control"  type="submit" (keyup)="onQuickFilterChanged($event)" ><i class="fa fa-user-plus"></i> Add User </button>
     </div>
 </div>
-<ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: calc(100vh - 300px)" [gridOptions]="gridOptions" (gridReady)="gridOptions.gridReady($event)" (cellDoubleClicked)="cellDoubleClicked($event)" (selectionChanged) = 'onSelectionChanged($event)' enableFilter></ag-grid-ng2>
+<ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: calc(100vh - 300px)" 
+[gridOptions]="gridOptions" 
+(gridReady)="gridOptions.gridReady($event)" 
+(cellDoubleClicked)="cellDoubleClicked($event);customer.show($event.data)"
+(selectionChanged) = 'onSelectionChanged($event)' enableFilter></ag-grid-ng2>
+
+<app-customer #customer></app-customer>
