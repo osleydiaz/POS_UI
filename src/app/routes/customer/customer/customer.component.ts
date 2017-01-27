@@ -8,19 +8,17 @@ import { Component, ViewChild} from '@angular/core';
 export class CustomerComponent {
   showDialog = false;
 
-       @ViewChild('classicModal') classicModal ;
-  
-  
+  @ViewChild('classicModal') classicModal ;
+
+  user = {};
+
+  inMailingList = false;
+
   constructor() {
-
-   }
-
+  }
 
   show(user){
-debugger;
-
+      this.user = user;
       this.classicModal.show();
-
-      console.log(user);
   }
 }

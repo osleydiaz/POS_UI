@@ -21,8 +21,8 @@ export class SettingsService {
         // App Settings
         // -----------------------------------
         this.app = {
-            name: 'Angle',
-            description: 'Angular Bootstrap Admin Template',
+            name: 'Park West Gallery POS',
+            description: 'PWG Point of Sale',
             year: ((new Date()).getFullYear())
         };
 

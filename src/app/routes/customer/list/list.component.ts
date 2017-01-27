@@ -62,6 +62,7 @@ export class ListComponent implements OnInit, OnDestroy {
         this.gridOptions = <GridOptions>{
             columnDefs: this.columnDefsFilter,
             rowData: null,
+            enableSorting: true,
             enableFilter: true,
             rowSelection: 'single',
             gridReady: (params) => {

@@ -443,18 +443,5 @@ export const menu = [
     ScannerProgram,
     DataTrans,
     Brochures,
-    Reports,
-    Dashboard,
-    Widgets,
-    headingComponents,
-    Elements,
-    Forms,
-    Charts,
-    Tables,
-    Maps,
-    headingMore,
-    Pages,
-    Blog,
-    Ecommerce,
-    Extras
+    Reports
 ];

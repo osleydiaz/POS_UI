@@ -1,0 +1,85 @@
+
+<div class="modal fade" bsModal #invoiceModal="bs-modal" [config]="{backdrop: false}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="invoiceModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Invoice Details</h4>
+            </div>
+            <div class="modal-body">
+                <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%;height: 300px" 
+                    [gridOptions]="gridOptions" 
+                    (gridReady)="gridOptions.gridReady($event)" 
+                    (cellDoubleClicked)="cellDoubleClicked($event);customer.show($event.data)"
+                    (selectionChanged) = 'onSelectionChanged($event)' enableFilter></ag-grid-ng2>
+
+                <div class="row">
+                    <div class="pull-right" style="display: inline-flex">
+                        <div style="padding:5px 10px">
+                            <span>Hammer Total:</span><b> $11520.00 </b>
+                        </div>
+                        <div style="padding:5px 10px">
+                            <span>Buyer's Premium Total:</span><b> $50.00 </b>
+                        </div>
+                        <div style="padding:5px 20px 5px 10px">
+                            <span>Appraisal Total:</span><b> $11520.00 </b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+
+                    </div>
+                     <div class="col-md-3">
+
+                    </div>
+                     <div class="col-md-3">
+
+                    </div>
+                     <div class="col-md-3">
+
+                    </div>
+
+                      <span style="display:inline-block;">
+                            <!--<div class="btn-group">
+                                <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> F1</button>
+                                <button class="btn btn-default" type="button"><i class="fa fa-angle-double-left"></i> F2</button>
+                                <button class="btn btn-default" type="button"> F3 <i class="fa fa-angle-right"></i></button>
+                                <button class="btn btn-default" type="button">F4 <i class="fa fa-angle-double-right"></i></button>
+                            </div>-->
+                            <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-note"></i> Line Note</button>
+                            </div>
+                            <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Transfer </button>
+                            </div>
+                            <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Add PromoArt</button>
+                            </div>
+                            <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Specially Priced Works </button>
+                            </div>
+                            <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Framing/Shipping </button>
+                            </div>
+                            <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Delete Item </button>
+                            </div>
+                             <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Add/Delete Appraisal </button>
+                            </div>
+                            <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Add/Delete All Appraisal </button>
+                            </div>
+                             <div class="btn-group">
+                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Art Removal </button>
+                            </div>
+                    </span>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>

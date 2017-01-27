@@ -5,10 +5,10 @@
 <!-- <alert [type]="'info'">None of this examples are based on the official jQuery-Datatables</alert> -->
  <div class="row">
     <div class="col-lg-4 col-md-4 pull-left">
-        <input class="button button-default" placeholder="Filter..." type="text" (keyup)="onQuickFilterChanged($event)" />
+        <input class="mb form-control" placeholder="Filter..." type="text" (keyup)="onQuickFilterChanged($event)" />
     </div>
     <div class="col-lg-4 col-md-4 pull-right">
-        <button class="mb form-control"  type="submit" (keyup)="onQuickFilterChanged($event)" ><i class="fa fa-user-plus"></i> Add User </button>
+        <button class="btn btn-sm btn-default pull-right"  type="submit" (keyup)="onQuickFilterChanged($event)" ><i class="fa fa-user-plus"></i> Add User </button>
     </div>
 </div>
 <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: calc(100vh - 300px)" 

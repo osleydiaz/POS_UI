@@ -1,0 +1,20 @@
+<div class="content-heading">
+    Invoicing
+    <small>Invoice management</small>
+</div>
+<!-- <alert [type]="'info'">None of this examples are based on the official jQuery-Datatables</alert> -->
+ <div class="row">
+    <div class="col-lg-4 col-md-4 pull-left">
+        <input class="mb form-control" placeholder="Filter..." type="text" (keyup)="onQuickFilterChanged($event)" />
+    </div>
+    <div class="col-lg-4 col-md-4 pull-right">
+        <button class="btn btn-sm btn-default pull-right"  type="submit" (keyup)="onQuickFilterChanged($event)" ><i class="fa fa-user-plus"></i> Add User </button>
+    </div>
+</div>
+<ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: calc(100vh - 300px)" 
+[gridOptions]="gridOptions" 
+(gridReady)="gridOptions.gridReady($event)" 
+(cellDoubleClicked)="cellDoubleClicked($event);invoice.show($event.data)"
+(selectionChanged) = 'onSelectionChanged($event)' enableFilter></ag-grid-ng2>
+
+<app-invoice #invoice></app-invoice>
