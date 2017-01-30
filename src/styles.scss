@@ -31,3 +31,11 @@
 @import '../node_modules/fullcalendar/dist/fullcalendar.min.css';
 
 @import '../node_modules/codemirror/lib/codemirror.css';
+
+.ag-angle .ag-header-cell {
+    background-color: #edf1f2;
+    font-weight: bold;
+}
+.ag-angle .ag-header-cell {
+    border-right: 1px solid #dde1e2;
+}

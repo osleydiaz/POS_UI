@@ -64,6 +64,7 @@ export class ListComponent implements OnInit, OnDestroy {
             rowData: null,
             enableSorting: true,
             enableFilter: true,
+            headerHeight:35,
             rowSelection: 'single',
             gridReady: (params) => {
                 params.api.sizeColumnsToFit();

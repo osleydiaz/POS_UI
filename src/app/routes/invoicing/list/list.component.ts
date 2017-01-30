@@ -44,9 +44,11 @@ export class ListComponent implements OnInit, OnDestroy {
         this.gridOptions = <GridOptions>{
             columnDefs: this.columnDefsFilter,
             rowData: null,
+            rowHeight:30,
             enableFilter: true,
             enableSorting: true,
             rowSelection: 'single',
+             headerHeight:35,
             gridReady: (params) => {
                 params.api.sizeColumnsToFit();
                 this.$win.on(this.resizeEvent, () => {

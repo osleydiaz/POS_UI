@@ -10,7 +10,11 @@ import { Http } from '@angular/http';
 export class InvoiceComponent {
   showDialog = false;
 
+  invoiceStep = 1;
+
   @ViewChild('invoiceModal') invoiceModal ;
+
+   @ViewChild('paymentModal') paymentModal ;
 
   invoice = {};
 
@@ -18,6 +22,19 @@ export class InvoiceComponent {
     $win = $(window);
 
     gridOptions: GridOptions;
+
+    payments = [
+      {PaymentType:1,PaymentTypeDesc: "Folio",Amount:1400,Number:34567,Expire: "07/20", BillingSameAsCustomer: true},
+      {PaymentType:2,PaymentTypeDesc: "CC",Amount:500,Number:6666555544442222,Expire: "12/22", BillingSameAsCustomer: false}
+    ];
+
+    promotions = [
+      {Id:1, Value: "Spend $5000 - 5% Discount"},
+      {Id:1, Value: "Spend $10000 - 10% Discount"},
+      {Id:1, Value: "No interest on purchases ($1000 and below) - 6 months term"}
+    ];
+      
+
 
    columnDefsFilter = [ 
         {headerName: 'Lot Type',field: 'lotType',width: 120}, 
@@ -40,6 +57,7 @@ export class InvoiceComponent {
             enableFilter: true,
             enableSorting: true,
             rowSelection: 'single',
+            headerHeight:35,
             gridReady: (params) => {
                 params.api.sizeColumnsToFit();
                 this.$win.on(this.resizeEvent, () => {
@@ -52,6 +70,7 @@ export class InvoiceComponent {
     }
 
   show(invoice){
+     this.invoiceStep = 1;
       this.invoice = invoice;
 
         
@@ -60,4 +79,54 @@ export class InvoiceComponent {
 
       this.invoiceModal.show();
   }
+
+  showPayment(){
+    this.invoiceStep = 2;
+
+  }
+
+  showDetails(){
+    this.invoiceStep = 1;
+  }
+
+  editPayment(){
+
+  }
+  deletePayment(){
+
+  }
+  addPayment(){
+
+  }
+
+
+
+
+  //payment data 
+paymentModalTitle = "Add Payment";
+_payment =  {PaymentType: "",PaymentTypeDesc:"",Amount:"",Number:"",Expire: "", BillingSameAsCustomer: true};
+resetPayment(){
+   this._payment =  {PaymentType: "",PaymentTypeDesc:"",Amount:"",Number:"",Expire: "", BillingSameAsCustomer: true};
+   this.paymentModalTitle = "Add Payment";
+}
+
+  showPaymentModal(payment){
+    debugger;
+
+    if(payment){
+      this.paymentModalTitle = "Edit Payment";
+      this._payment = payment;
+      // this._payment.PaymentType = payment.PaymentType;
+      // this._payment.Amount = payment.Amount;
+      // this._payment.Number = payment.Number;
+      // this._payment.Expire = payment.Expire;
+      // this._payment.BillingSameAsCustomer = payment.BillingSameAsCustomer;
+    }else{
+       this.resetPayment();
+    }
+
+    this.paymentModal.show();
+   
+  }
+
 }

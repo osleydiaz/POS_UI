@@ -9,76 +9,367 @@
                 <h4 class="modal-title">Invoice Details</h4>
             </div>
             <div class="modal-body">
-                <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%;height: 300px" 
-                    [gridOptions]="gridOptions" 
-                    (gridReady)="gridOptions.gridReady($event)" 
-                    (cellDoubleClicked)="cellDoubleClicked($event);customer.show($event.data)"
-                    (selectionChanged) = 'onSelectionChanged($event)' enableFilter></ag-grid-ng2>
+                <div  [hidden]="invoiceStep != 1">
+                    <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%;height: 300px" 
+                        [gridOptions]="gridOptions" 
+                        (gridReady)="gridOptions.gridReady($event)" 
+                        (cellDoubleClicked)="cellDoubleClicked($event);customer.show($event.data)"
+                        (selectionChanged) = 'onSelectionChanged($event)' enableFilter></ag-grid-ng2>
 
-                <div class="row">
-                    <div class="pull-right" style="display: inline-flex">
-                        <div style="padding:5px 10px">
-                            <span>Hammer Total:</span><b> $11520.00 </b>
-                        </div>
-                        <div style="padding:5px 10px">
-                            <span>Buyer's Premium Total:</span><b> $50.00 </b>
-                        </div>
-                        <div style="padding:5px 20px 5px 10px">
-                            <span>Appraisal Total:</span><b> $11520.00 </b>
+                    <div class="row">
+                        <div class="pull-right" style="display: inline-flex">
+                            <div style="padding:5px 10px">
+                                <span>Hammer Total:</span><b> $11520.00 </b>
+                            </div>
+                            <div style="padding:5px 10px">
+                                <span>Buyer's Premium Total:</span><b> $50.00 </b>
+                            </div>
+                            <div style="padding:5px 20px 5px 10px">
+                                <span>Appraisal Total:</span><b> $11520.00 </b>
+                            </div>
                         </div>
                     </div>
+                    <div class="row inv-button-group">
+                        <div class="col-md-4">
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-sticky-note-o"></i> Line Note</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-exchange"></i> Transfer </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-file-pdf-o"></i> F10 - Preview</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-print"></i> F11 - Print/Close </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-minus-square-o"></i> Art Removal</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-usd"></i> Sales History </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-gift"></i> F2 - Add PromoArt </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-truck"></i> F4 - Framing/Shipping </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-tags"></i> Specially Priced </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-trash-o"></i> F5 - Delete Item </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-money"></i>  F6 - Appraisal</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-default" type="button"><i class="fa fa-money"></i> F9 - All Appraisal  </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt clearfix">
+                        <div class="pull-right">
+                            <button class="btn btn-primary" type="button" (click)="showPayment()"> F8 - Next <i class="fa fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="row">
-                    <div class="col-md-3">
-
+                <div  [hidden]="invoiceStep != 2">
+                    <div class="row">
+                         <div class="col-md-12">
+                            <div class="col-md-10">
+                                 <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Payment Type</th>
+                                            <th>Amount</th>
+                                            <th>Number</th>
+                                            <th>Expire</th>
+                                            <th>Billing Address <br/> Same as Customer</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr  *ngFor='let payment of payments' >
+                                            <td>{{payment.PaymentTypeDesc}}</td>
+                                            <td>{{payment.Amount}}</td>
+                                            <td>{{payment.Number}}</td>
+                                            <td>{{payment.Expire}}</td>
+                                            <td class="text-center">
+                                                <i  [ngClass]="{'fa':true,'fa-square-o' : !payment.BillingSameAsCustomer, 'fa-check-square-o': payment.BillingSameAsCustomer}"></i>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-default btn-sm" name="editPayment" type="button"  (click)="showPaymentModal(payment)"><i class="fa fa-edit"></i> Edit </button>
+                                                <button class="btn btn-default btn-sm" type="button"><i class="fa fa-remove"></i> Delete </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <div class="col-md-2 inv-button-group">
+                                <button class="btn btn-default" type="button"><i class="fa fa-print"></i> Print CC Auth </button>
+                                <button class="btn btn-default" type="button" (click)="showPaymentModal(null)"><i class="fa fa-plus"></i> Add Payment</button>
+                            </div>
+                        </div>
                     </div>
-                     <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
 
+                            <div class="panel b">
+                                <div class="panel-heading"></div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2">
+                                            <span class="pull-right"> Less Credit: </span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div  class="input-group">
+                                                <input type="text" disabled class="form-control" value="0.00"/>
+                                                <span  class="input-group-btn">
+                                                   <button class="btn btn-default" type="button"><i class="fa fa-ellipsis-h"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="col-md-2">
+                                                <span class="pull-right"> Promoition: </span>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div  class="input-group">
+                                                    <select class="form-control" name="account">
+                                                        <option value="0"></option>
+                                                        <option *ngFor='let promo of promotions' value="{{promo.Id}}">{{promo.Value}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6"> 
+                                                <br/>
+                                                <i  [ngClass]="{'fa':true,'fa-square-o' : !true, 'fa-check-square-o': true}" ></i> Invoice Total Exceeds PWCC OTB
+                                            </div>
+                                            <div class="col-md-6"> 
+                                                <br/>
+                                                PWCC open to buy <span class="bg-danger" style="margin: 0 10px;padding:0 10px"> -1200.00 </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel b">
+                                <div class="panel-heading"><b>Invoice Summary</b></div>
+                                <div class="panel-body">
+                                <div class="col-md-3">
+                                    <div class="col-md-12">
+                                            <p class="pull-left">Custom Framing:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                        <div class="col-md-12">
+                                            <p class="pull-left">S/H and Restock</p>
+                                            <p class="pull-right">119.00</p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-3">
+                                        <div class="col-md-12">
+                                            <p class="pull-left">Art Subtotal:</p>
+                                            <p class="pull-right">49881.00</p>
+                                    </div>
+                                        <div class="col-md-12">
+                                            <p class="pull-left">Less Credit:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                        <div class="col-md-12">
+                                            <p class="pull-left">Sale Taxable Total:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                        <div class="col-md-12">
+                                            <p class="pull-left">Sale Tas Percent:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                        <div class="col-md-12">
+                                            <p class="pull-left">County Taxable Total:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                        <div class="col-md-12">
+                                            <p class="pull-left">County Subtax Percent:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                        <div class="col-md-12">
+                                            <p class="pull-left">Total Tax:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                        <div class="col-md-12">
+                                            <p class="pull-left">Tax Credit:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                        <div class="col-md-12">
+                                            <p class="pull-left">Appraisals:</p>
+                                            <p class="pull-right">0.00</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                            <p class="pull-left"><b>Invoice Total:</b></p>
+                                            <p class="pull-right"><b>0.00</b></p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>                        
                     </div>
-                     <div class="col-md-3">
-
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button class="btn btn-default" type="button"><i class="fa fa-file-pdf-o"></i> F10 - Preview</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-default" type="button"><i class="fa fa-print"></i> F11 - Print/Close </button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-default" type="button"><i class="fa fa-minus-square-o"></i> Art Removal</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-default" type="button"><i class="fa fa-usd"></i> Sales History </button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-default" type="button"><i class="fa fa-pencil"></i> Notes/Signature </button>
+                        </div>                       
                     </div>
-                     <div class="col-md-3">
-
+                     <br/>
+                    <div class="pt clearfix">
+                        <div class="pull-left">
+                            <button class="btn btn-primary" type="button" (click)="showDetails()"><i class="fa fa-chevron-left"></i> F7 - Back </button>
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-primary" type="button" (click)="invoiceModal.hide()"><i class="fa fa-check"></i> F12 - Done </button>
+                        </div>
                     </div>
-
-                      <span style="display:inline-block;">
-                            <!--<div class="btn-group">
-                                <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> F1</button>
-                                <button class="btn btn-default" type="button"><i class="fa fa-angle-double-left"></i> F2</button>
-                                <button class="btn btn-default" type="button"> F3 <i class="fa fa-angle-right"></i></button>
-                                <button class="btn btn-default" type="button">F4 <i class="fa fa-angle-double-right"></i></button>
-                            </div>-->
-                            <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-note"></i> Line Note</button>
-                            </div>
-                            <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Transfer </button>
-                            </div>
-                            <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Add PromoArt</button>
-                            </div>
-                            <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Specially Priced Works </button>
-                            </div>
-                            <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Framing/Shipping </button>
-                            </div>
-                            <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Delete Item </button>
-                            </div>
-                             <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Add/Delete Appraisal </button>
-                            </div>
-                            <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Add/Delete All Appraisal </button>
-                            </div>
-                             <div class="btn-group">
-                                 <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i> Art Removal </button>
-                            </div>
-                    </span>
                 </div>
                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" bsModal #paymentModal="bs-modal" [config]="{backdrop: false}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-m" style="margin-top:120px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="paymentModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{paymentModalTitle}}</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Payment Type</label>
+                         <select class="form-control" name="PaymentType"  [(ngModel)]="_payment.PaymentType">
+                            <option value="1">Folio</option>
+                            <option value="2">Park West Collctors Card</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Amount</label>
+                        <input class="form-control" type="text" name="amount" [(ngModel)]="_payment.Amount" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Number</label>
+                        <input class="form-control" type="text" name="number" required=""  [(ngModel)]="_payment.Number"/>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Expire</label>
+                        <input class="form-control" type="text" name="expire" required="" [(ngModel)]="_payment.Expire" />
+                    </div>
+               </div>
+               <div class="row">
+                    <div class="panel b">
+                        <div class="panel-heading">
+                            <label class="control-label">Name/Address for Payment is the same as the invoice </label>
+                            <div class="radio-inline c-radio">
+                                <label>
+                                    <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="true" [(ngModel)]="_payment.BillingSameAsCustomer" />
+                                    <span class="fa fa-check"></span>Yes</label>
+                            </div>
+                            <div class="radio-inline c-radio">
+                                <label>
+                                    <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="false" [(ngModel)]="_payment.BillingSameAsCustomer" />
+                                    <span class="fa fa-check"></span>No</label>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>First Name*</label>
+                                        <input class="form-control" type="text" name="name" required="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address1</label>
+                                        <input class="form-control" type="text" name="address1" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Last Name*</label>
+                                        <input class="form-control" type="text" name="lastname" required="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address2</label>
+                                        <input class="form-control" type="text" name="address2" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>City*</label>
+                                        <input class="form-control" type="text" name="city" required="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Zip/Postal Code*</label>
+                                        <input class="form-control" type="text" name="zip" required="" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>State/Province*</label>
+                                        <input class="form-control" type="text" name="state" required="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Country*</label>
+                                        <input class="form-control" type="text" name="country" required="" />
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    
+                     <div class="pt clearfix">
+                         <div class="col-md-12">
+                             <p class="pull-left text-sm"><i>Fields marked with (*) are required</i>
+                            </p>
+                            <div class="pull-right">
+                                <button class="btn btn-danger" type="button" (click)="paymentModal.hide()"><i class="fa fa-times"> </i> F3 - Cancel Changes</button>
+                                <button class="btn btn-primary" type="button" (click)="stepgroup4.isOpen = true"><i class="fa fa-save"> </i> F12 -Save and Exit</button>
+                            </div>
+                         </div>
+                    </div>
+               </div>
             </div>
         </div>
     </div>
