@@ -1,0 +1,30 @@
+<div class="content-heading">
+    Invoicing
+    <small>Invoice management</small>
+</div>
+<!-- <alert [type]="'info'">None of this examples are based on the official jQuery-Datatables</alert> -->
+ <div class="row">
+    <div class="col-lg-8">
+        <input class="mb form-control" placeholder="Filter..." type="text" (keyup)="onQuickFilterChanged($event)" style="width:250px"/>
+        <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: 300px" 
+            [gridOptions]="gridOptions" (gridReady)="gridOptions.gridReady($event)" 
+            (cellDoubleClicked)="cellDoubleClicked($event);invoice.show($event.data)"
+            (selectionChanged) = 'onSelectionChanged($event)' enableFilter>
+        </ag-grid-ng2>
+    </div>
+    <div class="col-lg-4">
+        <button class="btn btn-sm btn-default pull-right"  type="submit" (keyup)="onQuickFilterChanged($event)" ><i class="fa fa-user-plus"></i> Add User </button>
+        <div class="col-md-12">
+          <img style="max-height:100%; max-width:100%;" onError="this.src='assets/img/not_available.png'" src="pwgassets/images/im{{selectedItem.RegNum}}.jpg">
+        </div>
+        <div class="col-md-12" [innerHTML]="selectedItem.ArtDescription">
+        </div>
+        <div class="col-md-12" [innerHTML]="selectedItem.StockCodeDescription" >
+        </div>
+    </div>
+    <div></div>
+    
+</div>
+
+
+<app-galleryitem #invoice></app-galleryitem>

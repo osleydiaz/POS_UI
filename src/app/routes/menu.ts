@@ -24,7 +24,7 @@ const Invoicing = {
 
 const ElectronicGallery = {
     text: 'Electronic Gallery',
-    link: '/alectronicgallery',
+    link: '/egallery',
     icon: 'fa fa-picture-o'
 };
 

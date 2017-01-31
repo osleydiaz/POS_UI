@@ -3,11 +3,11 @@ import { GridOptions } from 'ag-grid/main';
 import { Http } from '@angular/http';
 
 @Component({
-  selector: 'app-invoice',
-  templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss'],
+  selector: 'app-galleryitem',
+  templateUrl: './item.component.html',
+  styleUrls: ['./item.component.scss'],
 })
-export class InvoiceComponent {
+export class GalleryItemComponent {
   showDialog = false;
 
   invoiceStep = 1;
