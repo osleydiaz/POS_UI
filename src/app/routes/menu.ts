@@ -37,8 +37,42 @@ const ScannerProgram = {
 const DataTrans = {
     text: 'Data Transfer',
     link: '/datatransfer',
-    icon: 'fa fa-database'
+    icon: 'fa fa-database',
+    submenu: [
+        {
+            text: 'Add Art',
+            link: '/datatransfer/addart'
+        },
+        {
+            text: 'Add eGallery Codes',
+            link: '/datatransfer/addegallerycodes'
+        },
+        {
+            text: 'Brochure Import',
+            link: '/datatransfer/brochureimport'
+        },
+         {
+            text: 'POS Export',
+            link: '/datatransfer/posexport'
+        },
+        {
+            text: 'POS Import',
+            link: '/datatransfer/posimport'
+        },
+         {
+            text: 'Restore From Backup',
+            link: '/datatransfer/restorefrombackup'
+        },
+         {
+            text: 'Tech Support Export',
+            link: '/datatransfer/techsupportexport'
+        }
+    ]
 };
+
+
+
+
 
 const Brochures = {
     text: 'Brochures',

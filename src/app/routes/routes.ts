@@ -20,6 +20,8 @@ export const routes = [
             { path: 'auction', loadChildren: './auction/auction.module#AuctionModule' },
             { path: 'invoicing', loadChildren: './invoicing/invoicing.module#InvoicingModule' },
             { path: 'egallery', loadChildren: './egallery/egallery.module#EGalleryModule' },
+            { path: 'brochures', loadChildren: './brochures/brochures.module#BrochuresModule' },
+            { path: 'datatransfer', loadChildren: './datatransfer/datatransfer.module#DatatransferModule' },
             { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
             { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' },
             { path: 'elements', loadChildren: './elements/elements.module#ElementsModule' },

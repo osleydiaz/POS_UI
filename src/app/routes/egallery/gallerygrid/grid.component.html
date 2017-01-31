@@ -1,32 +1,40 @@
 <div class="content-heading">
-    Invoicing
-    <small>Invoice management</small>
+    eGallery
+    <small>Electronic Gallery</small>
 </div>
 <!-- <alert [type]="'info'">None of this examples are based on the official jQuery-Datatables</alert> -->
  <div class="row">
     <div class="col-lg-8">
         <input class="mb form-control" placeholder="Filter..." type="text" (keyup)="onQuickFilterChanged($event)" style="width:250px"/>
-        <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: calc(100vh - 300px)" 
+        <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: calc(100vh - 350px)" 
             [gridOptions]="gridOptions" (gridReady)="gridOptions.gridReady($event)" 
             (cellDoubleClicked)="cellDoubleClicked($event);invoice.show($event.data)"
             (selectionChanged) = 'onSelectionChanged($event)' enableFilter>
         </ag-grid-ng2>
-        <div class="col-lg-12">
-            <button class="btn btn-default"  type="submit"  onclick="window.print();"><i class="fa fa-user-print"></i> Print </button>
+        <div class="col-lg-12" style="margin-top:10px">
+           
+            <button class="btn btn-default"  type="submit"  onclick=""><i class="fa fa-barcode"></i> Auth Codes </button>
+            <button class="btn btn-default"  type="submit"  onclick=""><i class="fa fa-edit"></i> F12 - View Details</button>
+            <button class="btn btn-default"  type="submit"  onclick=""><i class="fa fa-user-plus"></i> F3 - New Customer </button>
+            <button class="btn btn-default"  type="submit"  onclick=""><i class="fa fa-shopping-cart"></i> F5 - Purchase </button>
+            <button class="btn btn-default"  type="submit"  onclick=""><i class="fa fa-picture-o"></i> F10 - Frame </button>
+
         </div>
     </div>
-    <div class="col-lg-4">
-        <button class="btn btn-sm btn-default pull-right"  type="submit"  onclick="window.print();"><i class="fa fa-user-print"></i> Print </button>
+    <div class="col-lg-4 printdiv" style=" height: calc(100vh - 250px);overflow-y: scroll;">
         <div class="col-md-12">
-          <img style="max-height:100%; max-width:100%;" onError="this.src='assets/img/not_available.png'" src="pwgassets/images/im{{selectedItem.RegNum}}.jpg">
+            <h4 class="pull-left">Art Description</h4>
+            <button class="btn btn-sm btn-default pull-right"  type="submit"  onclick="window.print();"><i class="fa fa-print"></i> Print </button>
+        </div>         
+        <div class="col-md-12 text-center">
+        <br/>
+          <img style="max-height:50vh; max-width:100%;" onError="this.src='assets/img/not_available.png'" src="pwgassets/images/im{{selectedItem.RegNum}}.jpg">
         </div>
         <div class="col-md-12" [innerHTML]="selectedItem.ArtDescription">
         </div>
         <div class="col-md-12" [innerHTML]="selectedItem.StockCodeDescription" >
         </div>
     </div>
-    <div></div>
-    
 </div>
 
 
