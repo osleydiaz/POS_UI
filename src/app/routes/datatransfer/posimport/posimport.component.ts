@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FileUploader } from 'ng2-file-upload';
+
+const URL =  'https://evening-anchorage-3159.herokuapp.com/api/';
+
 
 @Component({
   selector: 'app-posimport',
@@ -7,9 +11,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class POSImportComponent implements OnInit {
 
-  constructor() { }
+   public uploader: FileUploader = new FileUploader({ url: URL });
+    public hasBaseDropZoneOver: boolean = false;
+    public hasAnotherDropZoneOver: boolean = false;
 
-  ngOnInit() {
-  }
+    public fileOverBase(e: any): void {
+        this.hasBaseDropZoneOver = e;
+    }
+
+    public fileOverAnother(e: any): void {
+        this.hasAnotherDropZoneOver = e;
+    }
+
+    constructor() { }
+
+    ngOnInit() {
+    }
 
 }
