@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-addart',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddArtComponent implements OnInit {
 
-  constructor() { }
+ public uploader: FileUploader = new FileUploader({ url: 'url' });
+    public hasBaseDropZoneOver: boolean = false;
+    public hasAnotherDropZoneOver: boolean = false;
 
-  ngOnInit() {
-  }
+    public fileOverBase(e: any): void {
+        this.hasBaseDropZoneOver = e;
+    }
+
+    public fileOverAnother(e: any): void {
+        this.hasAnotherDropZoneOver = e;
+    }
+
+    fileBrowseChanged(e){
+      e.currentTarget.value = "";
+      this.uploader.queue = [];
+    }
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+
 
 }

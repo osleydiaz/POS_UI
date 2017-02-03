@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {Observable} from "rxjs/Observable";
 import { FileUploader } from 'ng2-file-upload';
 
-const URL =  'https://evening-anchorage-3159.herokuapp.com/api/';
+const URL = 'http://localhost:8080/api/datatransfer/posimport' //'https://evening-anchorage-3159.herokuapp.com/api/';
+import {ChannelService, ConnectionState} from "../../../core/signalr/channel.service";
 
 
 @Component({
@@ -11,7 +13,10 @@ const URL =  'https://evening-anchorage-3159.herokuapp.com/api/';
 })
 export class POSImportComponent implements OnInit {
 
-   public uploader: FileUploader = new FileUploader({ url: URL });
+     connectionState$: Observable<string>;
+
+
+    public uploader: FileUploader = new FileUploader({ url: URL });
     public hasBaseDropZoneOver: boolean = false;
     public hasAnotherDropZoneOver: boolean = false;
 
@@ -23,9 +28,35 @@ export class POSImportComponent implements OnInit {
         this.hasAnotherDropZoneOver = e;
     }
 
-    constructor() { }
+    constructor(
+        private channelService: ChannelService
+    ) { 
+        
+        // Let's wire up to the signalr observables
+        //
+        this.connectionState$ = this.channelService.connectionState$.map((state: ConnectionState) => { return ConnectionState[state]; });
+
+        this.channelService.error$.subscribe(
+            (error: any) => { console.warn(error); },
+            (error: any) => { console.error("errors$ error", error); }
+        );
+
+        // Wire up a handler for the starting$ observable to log the
+        //  success/fail result
+        //
+        this.channelService.starting$.subscribe(
+            () => { console.log("signalr service has been started"); },
+            () => { console.warn("signalr service failed to start!"); }
+        );
+    }
+
+     fileBrowseChanged(e){
+        e.currentTarget.value = "";
+        this.uploader.queue = [];
+    }
 
     ngOnInit() {
+         this.channelService.start();
     }
 
 }

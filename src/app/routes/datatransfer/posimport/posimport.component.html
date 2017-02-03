@@ -1,4 +1,6 @@
-<div class="content-heading">POS Import</div>
+<div class="content-heading">POS Import
+     <small>Import data into the POS</small>
+</div>
 <div class="row">
     <div class="col-md-3">
         <div class="panel">
@@ -10,7 +12,7 @@
                 <p class="text-bold">Browse Option</p>
                 <label for="file2" class="file-upload">
                     <button class="btn btn-default btn-block">Browse</button>
-                    <input id="file2" type="file" ng2FileSelect [uploader]="uploader" />
+                    <input id="file2" type="file" ng2FileSelect [uploader]="uploader"  (click)="fileBrowseChanged($event)" />
                 </label>
             </div>
         </div>
@@ -66,10 +68,12 @@
                     <div>
                         Queue progress:
                         <div class="progress" style="">
-                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                            <!-- uploader.progress -->
+                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': task.progress + '%' }"></div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-info btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                    <task #task  [eventName]="'posimport'"></task>
+                    <!--<button type="button" class="btn btn-info btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
                         <span class="fa icon-cloud-upload mr"></span> Upload all
                     </button>
                     <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
@@ -77,7 +81,7 @@
                     </button>
                     <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
                         <span class="icon-trash mr"></span> Remove all
-                    </button>
+                    </button>-->
                 </div>
             </div>
         </div>

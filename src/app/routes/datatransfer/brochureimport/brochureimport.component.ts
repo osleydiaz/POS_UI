@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-brochureimport',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BrochureImportComponent implements OnInit {
 
-  constructor() { }
+   public uploader: FileUploader = new FileUploader({ url: 'URL' });
+    public hasBaseDropZoneOver: boolean = false;
+    public hasAnotherDropZoneOver: boolean = false;
 
-  ngOnInit() {
-  }
+    public fileOverBase(e: any): void {
+        this.hasBaseDropZoneOver = e;
+    }
+
+    public fileOverAnother(e: any): void {
+        this.hasAnotherDropZoneOver = e;
+    }
+
+    constructor() { }
+
+     fileBrowseChanged(e){
+      e.currentTarget.value = "";
+      this.uploader.queue = [];
+    }
+
+    ngOnInit() {
+    }
+
 
 }

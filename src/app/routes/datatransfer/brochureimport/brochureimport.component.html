@@ -1,3 +1,78 @@
-<div class="content-heading">Form Elements
-   <small>Standard and custom elements for any form</small>
+<div class="content-heading">Brochure Import
+     <small>Import Brochures into the POS</small>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel">
+            <div class="panel-body">
+                <h4 class="page-header mt0">Select POS Import Zip File</h4>
+                <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader" class="box-placeholder my-drop-zone">
+                    Base drop zone
+                </div>
+                <p class="text-bold">Browse Option</p>
+                <label for="file2" class="file-upload">
+                    <button class="btn btn-default btn-block">Browse</button>
+                    <input id="file2" type="file" ng2FileSelect [uploader]="uploader"  (click)="fileBrowseChanged($event)" />
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9" style="margin-bottom: 40px">
+        <div class="panel">
+            <div class="panel-body">
+                <p class="pull-right label label-info ng-binding ng-scope" *ngIf="uploader?.queue?.length">Queue length: {{ uploader?.queue?.length }}</p>
+                <h4 class="page-header mt0">Upload queue</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th width="50%">Name</th>
+                            <th>Size</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of uploader.queue">
+                            <td><strong>{{ item?.file?.name }}</strong></td>
+                            <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                            <td *ngIf="uploader.isHTML5">
+                                <div class="progress" style="margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span *ngIf="item.isSuccess"><i class="fa fa-ok"></i></span>
+                                <span *ngIf="item.isCancel"><i class="icon-close mr"></i></span>
+                                <span *ngIf="item.isError"><i class="fa fa-remove"></i></span>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-info btn-xs" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                    <span class="fa icon-cloud-upload mr"></span> Upload
+                                </button>
+                                <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
+                                    <span class="icon-close mr"></span> Cancel
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
+                                    <span class="icon-trash mr"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-body">
+                <div>
+                    <div>
+                        Queue progress:
+                        <div class="progress" style="">
+                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

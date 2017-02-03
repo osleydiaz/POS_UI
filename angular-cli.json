@@ -23,6 +23,7 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/signalr/jquery.signalr.js",
         "app/core/preloader/preloader.ts",
         "../node_modules/flot/jquery.flot.js",
         "../node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.js",

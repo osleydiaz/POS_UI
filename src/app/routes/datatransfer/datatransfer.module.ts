@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ColorPickerModule, ColorPickerService } from 'angular2-color-picker/lib';
 import { SelectModule } from 'ng2-select';
 import { TextMaskModule } from 'angular2-text-mask';
 // import { TagInputModule } from 'ng2-tag-input';
@@ -18,6 +17,14 @@ import { POSImportComponent } from './posimport/posimport.component';
 import { RestoreFromBackupComponent } from './restorefrombackup/restorefrombackup.component';
 import { TechSupportExportComponent } from './techsupportexport/techsupportexport.component';
 
+//signalR
+import "rxjs/add/operator/map";
+import {ChannelService, ChannelConfig, SignalrWindow} from "../../core/signalr/channel.service";
+import { TaskComponent }  from "../../core/signalr/task.component";
+let channelConfig = new ChannelConfig();  
+channelConfig.url = "http://localhost:8080/signalr";  
+channelConfig.hubName = "EventHub";
+//signalR End
 
 const routes: Routes = [
     { path: 'addart', component: AddArtComponent },
@@ -34,14 +41,18 @@ const routes: Routes = [
         SharedModule,
         RouterModule.forChild(routes),
         SelectModule,
-        ColorPickerModule,
         TextMaskModule,
         // TagInputModule,
         CustomFormsModule,
         FileUploadModule,
         ImageCropperModule
     ],
-    providers: [ColorPickerService],
+    providers: [
+        ChannelService,
+        { provide: SignalrWindow, useValue: window }
+       
+        
+    ],
     declarations: [
         AddArtComponent,
         AddeGalleryCodesComponent,
@@ -49,7 +60,8 @@ const routes: Routes = [
         POSExportComponent,
         POSImportComponent,
         RestoreFromBackupComponent,
-        TechSupportExportComponent
+        TechSupportExportComponent,
+        TaskComponent
     ],
     exports: [
         RouterModule
