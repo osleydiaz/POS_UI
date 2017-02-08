@@ -8,6 +8,7 @@ import { OffsidebarComponent } from './offsidebar/offsidebar.component';
 import { UserblockComponent } from './sidebar/userblock/userblock.component';
 import { UserblockService } from './sidebar/userblock/userblock.service';
 import { FooterComponent } from './footer/footer.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -25,7 +26,8 @@ import { SharedModule } from '../shared/shared.module';
         HeaderComponent,
         NavsearchComponent,
         OffsidebarComponent,
-        FooterComponent
+        FooterComponent,
+        SpinnerComponent
     ],
     exports: [
         LayoutComponent,
@@ -34,7 +36,8 @@ import { SharedModule } from '../shared/shared.module';
         HeaderComponent,
         NavsearchComponent,
         OffsidebarComponent,
-        FooterComponent
+        FooterComponent,
+        SpinnerComponent
     ]
 })
 export class LayoutModule { }

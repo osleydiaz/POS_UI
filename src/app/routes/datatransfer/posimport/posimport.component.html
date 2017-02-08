@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-3">
         <div class="panel">
-            <div class="panel-body">
+            <div class="panel-body" [hidden]="!task.done" >
                 <h4 class="page-header mt0">Select POS Import Zip File</h4>
                 <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader" class="box-placeholder my-drop-zone">
                     Base drop zone
@@ -12,7 +12,7 @@
                 <p class="text-bold">Browse Option</p>
                 <label for="file2" class="file-upload">
                     <button class="btn btn-default btn-block">Browse</button>
-                    <input id="file2" type="file" ng2FileSelect [uploader]="uploader"  (click)="fileBrowseChanged($event)" />
+                    <input id="file2" type="file" ng2FileSelect [uploader]="uploader"  (click)="fileBrowseChanged($event); task.clearEvents()" />
                 </label>
             </div>
         </div>
@@ -53,7 +53,7 @@
                                 <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
                                     <span class="icon-close mr"></span> Cancel
                                 </button>
-                                <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
+                                <button type="button" class="btn btn-danger btn-xs" (click)="item.remove(); task.clearEvents()">
                                     <span class="icon-trash mr"></span> Remove
                                 </button>
                             </td>

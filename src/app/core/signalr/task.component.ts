@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from "@angular/core";  
+import {Component, OnInit,ViewChild, Input} from "@angular/core";  
 import {Http, Response} from "@angular/http";
 
 import {ChannelService, ChannelEvent} from "./channel.service";
@@ -15,7 +15,7 @@ class StatusEvent {
             Progress Detail
         </div>
 
-        <div>
+        <div #scrollMe style="min-height: 250px;overflow-y: scroll;height: calc(100vh - 610px);">
             <p *ngFor="let ev of events" [ngClass]="{'text-success': ev.Data.Success,'text-danger': !ev.Data.Success}"> {{ev.Data.Description}} : {{ev.Data.PercentComplete}} % complete</p>
         </div>        
     `
@@ -34,6 +34,8 @@ export class TaskComponent implements OnInit {
     @Input() eventName: string;
     @Input() apiUrl: string;
 
+    @ViewChild('scrollMe') private scrollMe;
+
     messages = "";
     events = [];
 
@@ -47,6 +49,7 @@ export class TaskComponent implements OnInit {
     }
 
     public progress = 0;
+    public done = true;
 
     ngOnInit() {
         // Get an observable for events emitted on this channel
@@ -67,9 +70,27 @@ export class TaskComponent implements OnInit {
     private appendStatusUpdate(ev: ChannelEvent): void {
         // Just prepend this to the messages string shown in the textarea
         //
+        this.done = false;
         this.events.push(ev);
         let date = new Date();
         this.progress = ev.Data.PercentComplete;
         this.messages = `${date.toLocaleTimeString()} : ${ev.Data.Description} : ${ev.Data.PercentComplete} % complete\n` + this.messages;
+
+        this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
+        
+        if(ev.Data.PercentComplete == 100 || ev.Data.Success == false){
+            var scrollEl = this.scrollMe.nativeElement;
+            setTimeout(function() {
+               scrollEl.scrollTop = scrollEl.scrollHeight;
+            }, 10);
+            this.done = true;
+        }
+
+    }
+
+
+    clearEvents(){
+        this.events = [];
+        this.progress = 0;
     }
 }

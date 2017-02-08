@@ -210,7 +210,7 @@ app-root, .wrapper {
       &.has-sidebar-right {
         margin-right: $aside-wd + 20;
         + .offsidebar {
-          z-index: 1;
+          z-index: 999;
         }
       }
     }
@@ -485,7 +485,7 @@ app-root, .wrapper {
       position: fixed;
       top: 0;
       width: 100%;
-      z-index: $z-index-main-section + 10;
+      z-index: 1000;
     }
     > .aside,
     > .offsidebar {
@@ -531,6 +531,7 @@ _:-ms-lang(x), .layout-fixed .wrapper > .aside > .aside-inner {
 
       .offsidebar {
         position: absolute !important;
+        z-index: 999;
       }
 
       > .aside {

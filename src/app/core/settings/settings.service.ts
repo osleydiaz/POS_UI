@@ -7,9 +7,13 @@ export class SettingsService {
     private user: any;
     private app: any;
     public layout: any;
+    public spinning =false;
+
+    public apiUrl = "http://localhost:8080/api/";
 
     constructor() {
 
+        this.spinning = false;
         // User Settings
         // -----------------------------------
         this.user = {
@@ -45,6 +49,8 @@ export class SettingsService {
             asideToggled: false,
             viewAnimation: 'ng-fadeInUp'
         };
+
+        
 
     }
 
