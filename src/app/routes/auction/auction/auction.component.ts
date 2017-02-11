@@ -11,56 +11,49 @@ export class AuctionComponent implements OnInit {
 
   lotIndex = 0;
   lots = [];
+  allLots = [];
   lot = {Artist:{},IsPieceSold:false,ArtDescription:{},ArtistDescription:{},StockCode:{},Artwork:{}};
+  searchRegNum = "";
+  searchArtist = "";
+  searchBountyOnly = false;
 
-  public regNums: Array<string> = ['Amsterdam', 'Antwerp', 'Athens', 'Barcelona',
-      'Berlin', 'Birmingham', 'Bradford', 'Bremen', 'Brussels', 'Bucharest',
-      'Budapest', 'Cologne', 'Copenhagen', 'Dortmund', 'Dresden', 'Dublin',
-      'Düsseldorf', 'Essen', 'Frankfurt', 'Genoa', 'Glasgow', 'Gothenburg',
-      'Hamburg', 'Hannover', 'Helsinki', 'Kraków', 'Leeds', 'Leipzig', 'Lisbon',
-      'London', 'Madrid', 'Manchester', 'Marseille', 'Milan', 'Munich', 'Málaga',
-      'Naples', 'Palermo', 'Paris', 'Poznań', 'Prague', 'Riga', 'Rome',
-      'Rotterdam', 'Seville', 'Sheffield', 'Sofia', 'Stockholm', 'Stuttgart',
-      'The Hague', 'Turin', 'Valencia', 'Vienna', 'Vilnius', 'Warsaw', 'Wrocław',
-      'Zagreb', 'Zaragoza', 'Łódź'];
+  public regNums: Array<string> = [];
+  public artists: Array<string> = [];
 
   constructor( private settings: SettingsService,private http:Http) {
-    this.settings.spinning = true;
-     http.get(this.settings.apiUrl+ "auction/getlotids")
-            .subscribe((data) => {
-                this.settings.spinning = false;
-                this.lots= data.json();
-                this. getLot();
-            });
+    this.getLots();
+    
   } 
 
   ngOnInit() {
   }
 
   keyDown($event) {
-    $event.preventDefault();
-    console.log($event);
+
+    var preventDefault = true;
 
     switch ($event.code) {
       case "Escape":
         this.settings.layout.offsidebarOpen = !this.settings.layout.offsidebarOpen;
         break;
       case "F1":
-        this. firstLot();
+        this.firstLot();
         break;
       case "F2":
-        this. prevLot();
+        this.prevLot();
         break;
       case "F3":
-        this. nextLot();
+        this.nextLot();
         break;
       case "F4":
-        this. lastLot();
+        this.lastLot();
         break;
-    
       default:
+        preventDefault =false;
         break;
     }
+    if( preventDefault)
+       $event.preventDefault();
   }
 
 
@@ -92,17 +85,108 @@ export class AuctionComponent implements OnInit {
       this.getLot();
   }
 
-  private getLot(){
+
+
+  refreshRegNum($event){
+    this.searchRegNum = "";
+    if($event.id)
+      this.searchRegNum = $event.id;
+     this.filterLots();
+  }
+
+  refreshArtist($event){
+    this.searchArtist = "";
+    if($event.id)
+        this.searchArtist = $event.id;
+    this.filterLots();
+  }
+
+  bountyOnlyChanged($event){
+    //searchBountyOnly
+    this.filterLots();
+  }
+
+  private filterLots(){
+     this.lotIndex = 0;
+
+    this.lots = this.allLots.slice();
+
+     if(this.searchRegNum != "" ){
+         this.lots = this.lots.filter(l => l.RegNum === this.searchRegNum);
+     }
+
+    if(this.searchArtist != ""){
+         this.lots = this.lots.filter(l => l.Artist.Code === this.searchArtist);
+     }
+
+
+     if(this.searchBountyOnly){
+       this.lots = this.lots.filter(l => l.Bounty != 0);
+     }
+
+      this.regNums = [];
+      this.artists = [];
+
+      var artistDict = [];
+
+      for (let l of this.lots) {
+        this.regNums.push(l.RegNum);
+
+        if(!artistDict[l.Artist.Code]){
+           artistDict[l.Artist.Code] = true;
+           this.artists.push(l.Artist.Code);
+        }
+      }
+
+      this.artists.sort()
+
+      this.getLot();
+  }
+
+   private getLots(){
 
     this.settings.spinning = true;
     
-    var lotId = this.lots[this.lotIndex];
+    this.http.get(this.settings.apiUrl+ "auction/getlots")
+            .subscribe(
+              data => {
+                this.settings.spinning = false;
+                this.allLots= data.json();
+                this.filterLots();
+                this. getLot();
+              },
+              err => {
+                 this.settings.spinning = false;
+                 //todo: show error 
+                 alert('Error loading data')
+              }
+            );
+  }
+
+  private getLot(){
+
+    if(!this.lots[this.lotIndex]){
+      //todo: error
+      alert("Error showing result");
+      return;
+    }
+
+    this.settings.spinning = true;
+    
+    var lotId = this.lots[this.lotIndex].LotID;
 
     this.http.get(this.settings.apiUrl+ "auction/getlot?lotId="+lotId)
-            .subscribe((data) => {
-              this.settings.spinning = false;
-              this.lot= data.json();
-            });
+            .subscribe(
+              data => {
+                this.settings.spinning = false;
+                this.lot= data.json();
+              },
+              err => {
+                   this.settings.spinning = false;
+                    //todo: show error 
+                    alert('Error Loading Lot')
+              }
+            );
 
   }
 
