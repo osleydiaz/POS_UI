@@ -19,10 +19,18 @@
 </div>
 <div class="row" style="text-align:center;margin-bottom:10px">
         <div class="btn-group">
-            <button class="btn btn-default"  style="width:80px" type="button" (click)="firstLot()"><i class="fa fa-angle-double-left"></i> F1</button>
-            <button class="btn btn-default"  style="width:80px" type="button" (click)="prevLot()"><i class="fa fa-angle-left"></i> F2</button>
-            <button class="btn btn-default"  style="width:80px" type="button" (click)="nextLot()"> F3 <i class="fa fa-angle-right"></i></button>
-            <button class="btn btn-default"  style="width:80px" type="button" (click)="lastLot()">F4 <i class="fa fa-angle-double-right"></i></button>
+            <button class="btn btn-default"  style="width:80px" type="button" (click)="firstLot()"><i class="fa fa-angle-double-left"></i> F2</button>
+            <button class="btn btn-default"  style="width:80px" type="button" (click)="prevLot()"><i class="fa fa-angle-left"></i> F3</button>
+            <button class="btn btn-default"  style="width:80px" type="button" (click)="nextLot()"> F4 <i class="fa fa-angle-right"></i></button>
+            <button class="btn btn-default"  style="width:80px" type="button" (click)="lastLot()">F5 <i class="fa fa-angle-double-right"></i></button>
+        </div>
+        <div class="btn-group" style="width:90px"> Sort By </div>
+         <div class="btn-group" style="width:90px">
+            <select class="form-control"  [(ngModel)]="sortBy"  (change)="sortLots()"  name="" id="" placeholder="Sort By">
+                <option>Artist</option>
+                <option>Lot</option>
+                <option>Reg</option>
+            </select>
         </div>
 </div>
 <div class="panel b">   
@@ -60,13 +68,12 @@
                 </div>                
             </div>
             <div class="col-md-3">
-                <span style="padding: 0 20px" class="text-danger"> Highest Record Price In This Cruise: <b>${{lot.HighestRecordedPrice}}</b></span><br/>
                 <span style="padding: 0 20px"> Custom Framing: <b>${{lot.FramePriceCalculated}}</b></span><br/>
                 <span style="padding: 0 20px"> Shipping Size: <b>{{lot.ShippingSizePrice}}</b></span><br/>
                 <span style="padding: 0 20px" >TO Bonus: <b>${{lot.ToBonus}}</b></span><br/>                
             </div>
             <div class="col-md-2">
-                <button class="btn btn-default pull-right"><i class="fa fa-gift"></i> Promotions </button><br/>
+                <button class="btn btn-default pull-right" (click)="promotions.show(lot)"><i class="fa fa-gift"></i> Promotions </button><br/>
             </div>            
         </div>
         <br/><br/>
@@ -104,3 +111,6 @@
         <span [ngStyle]="{'background-color':  lot.StockCode.BackColor,'padding': '3px 6px'}" [innerHTML]="lot.StockCode.Description"></span>
     </div>
 </div>
+<app-auctioneertool  class="offsidebar" style="margin-top: 0px;" [lot]="lot" [priceLevels]="priceLevels"></app-auctioneertool>
+
+<app-promotions #promotions></app-promotions>

@@ -17,6 +17,10 @@ export class AuctionComponent implements OnInit {
   searchArtist = "";
   searchBountyOnly = false;
 
+  priceLevels = [];
+
+  sortBy = "Lot";
+
   public regNums: Array<string> = [];
   public artists: Array<string> = [];
 
@@ -34,18 +38,18 @@ export class AuctionComponent implements OnInit {
 
     switch ($event.code) {
       case "Escape":
-        this.settings.layout.offsidebarOpen = !this.settings.layout.offsidebarOpen;
-        break;
-      case "F1":
-        this.firstLot();
+        this.settings.layout.auctioneerToolOpen = !this.settings.layout.auctioneerToolOpen;
         break;
       case "F2":
-        this.prevLot();
+        this.firstLot();
         break;
       case "F3":
-        this.nextLot();
+        this.prevLot();
         break;
       case "F4":
+        this.nextLot();
+        break;
+      case "F5":
         this.lastLot();
         break;
       default:
@@ -140,7 +144,7 @@ export class AuctionComponent implements OnInit {
 
       this.artists.sort()
 
-      this.getLot();
+      this.sortLots();
   }
 
    private getLots(){
@@ -180,6 +184,7 @@ export class AuctionComponent implements OnInit {
               data => {
                 this.settings.spinning = false;
                 this.lot= data.json();
+                this.getPriceLevels(lotId);
               },
               err => {
                    this.settings.spinning = false;
@@ -188,6 +193,48 @@ export class AuctionComponent implements OnInit {
               }
             );
 
+  }
+
+
+private getPriceLevels(lotId){
+
+    this.settings.spinning = true;
+
+    this.http.get(this.settings.apiUrl+ "auction/getPriceLevels?lotId="+lotId)
+            .subscribe(
+              data => {
+                this.settings.spinning = false;
+                this.priceLevels= data.json();
+              },
+              err => {
+                   this.settings.spinning = false;
+                    //todo: show error 
+                    alert('Error Loading Lot')
+              }
+            );
+
+  }
+
+  sortLots(){
+    switch (this.sortBy) {
+      case "Artist":
+        this.lots.sort((l1,l2)=> l1.Artist.Code > l2.Artist.Code ? 1 : -1);
+        break;
+      case "Lot":
+         this.lots.sort((l1,l2)=> l1.LotNum > l2.LotNum ? 1 : -1);
+        break;
+      case "Reg":
+         this.lots.sort((l1,l2)=> l1.RegNum > l2.RegNum ? 1 : -1);
+        break;
+    
+      default:
+        break;
+    }
+
+     this.lotIndex = 0;
+
+     this.getLot();
+    
   }
 
 }

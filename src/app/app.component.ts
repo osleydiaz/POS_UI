@@ -1,4 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
+import { Http } from '@angular/http';
 declare var $: any;
 
 import { SettingsService } from './core/settings/settings.service';
@@ -21,7 +22,25 @@ export class AppComponent implements OnInit {
     @HostBinding('class.aside-toggled') get asideToggled() { return this.settings.layout.asideToggled; };
     @HostBinding('class.aside-collapsed-text') get isCollapsedText() { return this.settings.layout.isCollapsedText; };
 
-    constructor(public settings: SettingsService) { }
+    @HostBinding('class.offsidebar-open') get auctioneerToolOpen() { return this.settings.layout.auctioneerToolOpen; };
+
+
+    constructor(public settings: SettingsService,private http:Http) { 
+        this.settings.spinning = true;
+        this.http.get(this.settings.apiUrl+ "app/getinfo")
+            .subscribe(
+              data => {
+                  debugger;
+                this.settings.spinning = false;
+                this.settings.app.info =  data.json();;
+              },
+              err => {
+                 this.settings.spinning = false;
+                 //todo: show error 
+                 alert('Error loading data')
+              }
+            );
+    }
 
     ngOnInit() {
         $(document).on('click', '[href="#"]', e => e.preventDefault());

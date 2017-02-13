@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SharedModule } from '../../shared/shared.module';
 import { AuctionComponent } from './auction/auction.component';
+import { PromotionsComponent } from './promotions/promotions.component';
+import { AuctioneertoolComponent } from './auctioneertool/auctioneertool.component';
 import { SelectModule } from 'ng2-select';
 
 const routes: Routes = [
@@ -16,7 +18,9 @@ const routes: Routes = [
         SelectModule
     ],
     declarations: [
-       AuctionComponent
+       AuctionComponent,
+       PromotionsComponent,
+       AuctioneertoolComponent
     ],
     exports: [
         RouterModule

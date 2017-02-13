@@ -5,7 +5,7 @@ declare var $: any;
 export class SettingsService {
 
     private user: any;
-    private app: any;
+    public app: any;
     public layout: any;
     public spinning =false;
 
@@ -27,8 +27,10 @@ export class SettingsService {
         this.app = {
             name: 'Park West Gallery POS',
             description: 'PWG Point of Sale',
-            year: ((new Date()).getFullYear())
+            year: ((new Date()).getFullYear()),
+            info:{}
         };
+        
 
         // Layout Settings
         // -----------------------------------
@@ -47,7 +49,8 @@ export class SettingsService {
             hiddenFooter: false,
             offsidebarOpen: false,
             asideToggled: false,
-            viewAnimation: 'ng-fadeInUp'
+            viewAnimation: 'ng-fadeInUp',
+             auctioneerToolOpen: false,
         };
 
         
