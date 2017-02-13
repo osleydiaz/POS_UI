@@ -1,0 +1,21 @@
+
+<div class="modal fade" bsModal #classicModal="bs-modal" [config]="{backdrop: false}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="classicModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Promotion available for this lot</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-b">
+                    <div class="panel-body" style="max-height:50vh;overflow-y: scroll">
+                        <span *ngFor="let item of promotions; let i = index">{{i + 1}}) {{item.Promotion.Description}}<br/></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

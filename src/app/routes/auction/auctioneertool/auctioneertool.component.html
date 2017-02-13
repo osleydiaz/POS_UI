@@ -1,0 +1,102 @@
+<h3 class="text-center text-thin">Auctioneer Assistant</h3>
+<div class="p">
+    <h4 class="text-muted text-thin">Framed Pricing</h4>
+    <div class="clearfix">
+        <p class="pull-left">Price</p>
+        <div class="pull-right">
+           <b>{{lot.AboveReserveCalculated}}</b>
+        </div>
+    </div>
+    <div class="clearfix">
+        <p class="pull-left">Your are not allowed to bid on behalf of the house at or above</p>
+        <div class="pull-right">
+            <b>${{lot.CeilingCalculated}}</b>
+        </div>
+    </div>
+    <!--
+    <div class="clearfix">
+      <p class="pull-left">RTL</p>
+      <div class="pull-right">
+         <label class="switch">
+            <input type="checkbox" [(ngModel)]="layoutRTL"/>
+            <span></span>
+         </label>
+      </div>
+    </div>
+    -->
+</div>
+<div class="p">
+    <h4 class="text-muted text-thin">Sales Goals</h4>
+    <div class="clearfix">
+         <p class="pull-left">Amount Sold</p>
+        <div class="pull-right">
+           <b>{{lot.AmountToGoal}}</b>
+        </div>
+    </div>
+    <div [hidden]="lot.Goal7 == 0" class="clearfix">
+         <p class="pull-left">Goal 7 {{lot.AmountToGoal > lot.Goal7 ? " Reached!" : ""}}</p>
+        <div class="pull-right">
+           <b>${{lot.Goal7}}</b>
+        </div>
+    </div>
+    <div class="clearfix" [hidden]="lot.Goal6 == 0">
+         <p class="pull-left">Goal 6 {{lot.AmountToGoal > lot.Goal6 ? " Reached!" : ""}}</p>
+        <div class="pull-right">
+           <b>${{lot.Goal6}}</b>
+        </div>
+    </div>
+    <div class="clearfix" [hidden]="lot.Goal5 == 0">
+         <p class="pull-left">Goal 5 {{lot.AmountToGoal > lot.Goal5 ? " Reached!" : ""}}</p>
+        <div class="pull-right">
+           <b>${{lot.Goal5}}</b>
+        </div>
+    </div>
+    <div class="clearfix" [hidden]="lot.Goal4 == 0">
+         <p class="pull-left">Goal 4 {{lot.AmountToGoal > lot.Goal4 ? " Reached!" : ""}}</p>
+        <div class="pull-right">
+           <b>${{lot.Goal4}}</b>
+        </div>
+    </div>
+    <div class="clearfix" [hidden]="lot.Goal3 == 0">
+         <p class="pull-left">Goal 3 {{lot.AmountToGoal > lot.Goal3 ? " Reached!" : ""}}</p>
+        <div class="pull-right">
+           <b>${{lot.Goal3}}</b>
+        </div>
+    </div>
+    <div class="clearfix" [hidden]="lot.Goal2 == 0">
+         <p class="pull-left">Goal 2 {{lot.AmountToGoal > lot.Goal2 ? " Reached!" : ""}}</p>
+        <div class="pull-right">
+           <b>${{lot.Goal2}}</b>
+        </div>
+    </div>
+    <div class="clearfix" [hidden]="lot.Goal1 == 0">
+         <p class="pull-left">Goal 1   {{lot.AmountToGoal > lot.Goal1 ? " Reached!" : ""}}</p>
+        <div class="pull-right">
+           <b>${{lot.Goal1}}</b>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="p">
+    <h4 class="text-muted text-thin">Price Levels</h4>
+
+    <div *ngFor="let item of priceLevels; let i = index" class="clearfix">
+         <p class="pull-left"><b>{{item.BidLetter}} &nbsp;&nbsp;&nbsp; {{item.Amount}}</b></p>
+    </div>
+
+    <div class="clearfix">
+         <p class="pull-left">Highest Recorded Selling Price</p>
+        <div class="pull-right">
+           <b>{{lot.HighestRecordedPrice}}</b>
+        </div>
+    </div>
+     <div class="clearfix">
+         <p class="pull-left" style="color:red">Highest Recorded Selling Price for this Cruise</p>
+        <div class="pull-right">
+           <b>{{lot.HighestAuctionPrice}}</b>
+        </div>
+    </div>
+    
+</div>
