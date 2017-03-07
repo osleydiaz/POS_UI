@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
         this.http.get(this.settings.apiUrl+ "app/getinfo")
             .subscribe(
               data => {
-                  debugger;
                 this.settings.spinning = false;
                 this.settings.app.info =  data.json();;
               },
