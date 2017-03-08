@@ -90,9 +90,17 @@
                 </div>                
             </div>
             <div class="col-md-3">
-                <span style="padding: 0 20px"> Custom Framing: <b>${{lot.FramePriceCalculated}}</b></span><br/>
+                <dl class="dl-horizontal">
+                    <dt>Custom Framing:</dt>
+                    <dd>${{lot.FramePriceCalculated}}</dd>
+                    <dt>Shipping Size:</dt>
+                    <dd>{{lot.ShippingSizePrice}}</dd>
+                    <dt  [hidden]="settings.app.info.AuctionType == 'LAND'">TO Bonus:</dt>
+                    <dd [hidden]="settings.app.info.AuctionType == 'LAND'">{{lot.TOBonus}}</dd>
+                </dl>
+                <!--<span style="padding: 0 20px"> Custom Framing: <b>${{lot.FramePriceCalculated}}</b></span><br/>
                 <span style="padding: 0 20px"> Shipping Size: <b>{{lot.ShippingSizePrice}}</b></span><br/>
-                <span style="padding: 0 20px" >TO Bonus: <b>${{lot.ToBonus}}</b></span><br/>                
+                <span style="padding: 0 20px"  [hidden]="settings.app.info.AuctionType == 'LAND'">TO Bonus: <b>{{lot.TOBonus}}</b></span><br/>                -->
             </div>
             <div class="col-md-2">
                 <button class="btn btn-default pull-right" (click)="promotions.show(lot)"><i class="fa fa-gift"></i> Promotions </button><br/>
@@ -152,8 +160,8 @@
                 <div class="clearfix"> </div>
                 <br/>
                 <div [hidden]="!msg.ShowYesNoBtns">   
-                    <button class="btn btn-primary"> Yes </button>
-                    <button class="btn btn-danger"> No </button>
+                    <button class="btn btn-primary" (click)="msg.YesCallback();msgModal.hide()"> Yes </button>
+                    <button class="btn btn-danger" (click)="msg.NoCallback();msgModal.hide()"> No </button>
                 </div>
             </div>
         </div>

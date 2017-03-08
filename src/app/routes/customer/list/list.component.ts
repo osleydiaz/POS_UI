@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GridOptions } from 'ag-grid/main';
 import { Http } from '@angular/http';
+import { SettingsService } from '../../../core/settings/settings.service';
+
 
 import {CustomerComponent} from '../customer/customer.component';
 
@@ -32,6 +34,8 @@ export class ListComponent implements OnInit, OnDestroy {
     //     }
     // },
 
+    customers = [];
+
     hasInvoiceRenderer = function(params) {
         var hasInvoice = params.value;
         if(hasInvoice)
@@ -41,20 +45,20 @@ export class ListComponent implements OnInit, OnDestroy {
     };
 
     columnDefsFilter = [ 
-        {headerName: 'Bid#',field: 'bidNum',width: 80}, 
-        {headerName: 'Session#',field: 'ext',width: 115}, 
-        {headerName: 'Name',field: 'name',width: 150}, 
-        {headerName: 'Last Name',field: 'lastName'}, 
-        {headerName: 'City',field: 'city',width: 150}, 
-        {headerName: 'State',field: 'state',width: 90}, 
-        {headerName: 'Home Phone',field: 'homePhone',width: 150}, 
-        {headerName: 'Work Phone',field: 'workPhone',width: 150}, 
-        {headerName: 'Last Registered',field: 'lastRegistered',width: 150}, 
-        {headerName: 'Cabin',field: 'cabin',width: 90}, 
-        {headerName: 'Invoiced',field: 'hasInvoice',width:  100, cellRenderer: this.hasInvoiceRenderer}
+        {headerName: 'Bid#',field: 'BidNum',width: 80}, 
+        {headerName: 'Session#',field: 'SessionNum',width: 115}, 
+        {headerName: 'Name',field: 'FirstName',width: 150}, 
+        {headerName: 'Last Name',field: 'LastName'}, 
+        {headerName: 'City',field: 'City',width: 150}, 
+        {headerName: 'State',field: 'State.Name',width: 90}, 
+        {headerName: 'Home Phone',field: 'HomePhone',width: 150}, 
+        {headerName: 'Work Phone',field: 'WorkPhone',width: 150}, 
+        {headerName: 'Last Registered',field: 'ModifiedDate',width: 150}, 
+        {headerName: 'Cabin',field: 'Cabin',width: 90}, 
+        {headerName: 'Invoiced',field: 'HasInvoice',width:  100, cellRenderer: this.hasInvoiceRenderer}
     ];  
 
-    constructor(http: Http) {     
+    constructor(private settings: SettingsService,private http: Http) {     
 
         //this.customerComponent = <CustomerComponent>{};
 
@@ -75,11 +79,13 @@ export class ListComponent implements OnInit, OnDestroy {
         };
 
       
-        http.get('assets/server/ag-customers.json')
-            .subscribe((data) => {
-                this.gridOptions.api.setRowData(data.json());
-                this.gridOptions.api.sizeColumnsToFit();
-            });
+        // http.get('assets/server/ag-customers.json')
+        //     .subscribe((data) => {
+        //         this.gridOptions.api.setRowData(data.json());
+        //         this.gridOptions.api.sizeColumnsToFit();
+        //     });
+
+        this.getCustomers();
     }
 
      private onQuickFilterChanged($event) {
@@ -88,6 +94,25 @@ export class ListComponent implements OnInit, OnDestroy {
 
 
     ngOnInit() { }
+
+    private getCustomers(){
+
+        this.settings.spinning = true;
+        
+        this.http.get(this.settings.apiUrl+ "customer/getAll")
+                .subscribe(
+                data => {
+                    this.settings.spinning = false;
+                    this.customers= data.json();
+                    this.gridOptions.api.setRowData( this.customers);
+                },
+                err => {
+                    this.settings.spinning = false;
+                    //todo: show error 
+                    alert('Error loading data')
+                }
+                );
+    }
 
     ngOnDestroy() {
         this.$win.off(this.resizeEvent);

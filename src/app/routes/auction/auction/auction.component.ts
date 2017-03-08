@@ -194,6 +194,7 @@ export class AuctionComponent implements OnInit {
               data => {
                 this.settings.spinning = false;
                 this.lot= data.json();
+
                 this.getPriceLevels(lotId);
               },
               err => {
