@@ -8,42 +8,48 @@
                 </button>
                 <h4 class="modal-title">Classic modal</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" >
+                <form [formGroup]="valForm"  (submit)="submitForm($event, valForm.value)" novalidate="">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Bid Num</label>
-                        <input class="form-control" type="text" name="binNum" required="" [(ngModel)]="user.BidNum" />
+                        <input class="form-control" formControlName="bidNum" required="" [formControl]="valForm.controls['bidNum']" />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['bidNum'].hasError('range') && (valForm.controls['bidNum'].dirty || valForm.controls['bidNum'].touched)">This field requires a range</span>
                     </div>
                     <div class="form-group col-md-3">
                         <label>Cabin</label>
-                        <input class="form-control" type="text" name="cabin"  [(ngModel)]="user.cabin" />
+                        <input class="form-control" type="text" formControlName="cabin" required="" [formControl]="valForm.controls['cabin']"/>
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['cabin'].hasError('InvalidValue') && (valForm.controls['cabin'].dirty || valForm.controls['cabin'].touched)">Please enter Cabin</span>
                     </div>
                     <div class="form-group col-md-3">
                         <label>Folio</label>
-                        <input class="form-control" type="text" name="folio" required="" [(ngModel)]="user.Folio" />
+                        <input class="form-control" type="text" formControlName="folio" required="" [formControl]="valForm.controls['folio']"/>
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['folio'].hasError('InvalidValue') && (valForm.controls['folio'].dirty || valForm.controls['folio'].touched)">Please enter Cabin</span>
                     </div>
                     <div class="form-group col-md-3">
                         <label>Session</label>
                         <div style="display: inline-flex">
-                            <input class="form-control" type="text" name="Session"  [(ngModel)]="user.sessionNum" disabled style="width:50%"/>
+                            <input class="form-control" type="text" name="Session"  disabled style="width:50%"/>
                             <input class="form-control" type="text" name="SessionTime" placeholder="toays date"  style="width:50%"/>
                         </div>
                     </div>
                      <div class="form-group  col-md-2">
                          <label>Salutation</label>
                           <!--<input class="form-control" type="text" name="salutation" />-->
-                        <select class="form-control"     [(ngModel)]="user.Prefix"   name="" id="" placeholder="">   <!--   (change)="sortLots()"-->
-                               <option *ngFor="let item of prefixCodes; let i = index"   [selected] = "item.Code == user.Prefix">{{item.Code}}</option>
+                        <select class="form-control"  formControlName="prefix" required="" [formControl]="valForm.controls['prefix']">   <!--   (change)="sortLots()"-->
+                               <option *ngFor="let item of prefixCodes; let i = index">{{item.Code}}</option>
                         </select>
                     </div>
                     
                     <div class="form-group  col-md-5">
                         <label>First Name*</label>
-                        <input class="form-control" type="text" name="name" required="" [(ngModel)]="user.FirstName" />
+                        <input class="form-control" type="text"  formControlName="firstName" required="" [formControl]="valForm.controls['firstName']" />
+                        <span class="text-danger" *ngIf="(valForm.controls['firstName'].hasError('rangeLength') || valForm.controls['firstName'].hasError('required'))&& (valForm.controls['firstName'].dirty || valForm.controls['firstName'].touched)">Plese enter a valid Name</span>
                     </div>
                         <div class="form-group col-md-5">
                         <label>Last Name*</label>
-                        <input class="form-control" type="text" name="lastname"  [(ngModel)]="user.LastName"  required="" />
+                        <input class="form-control" type="text"  formControlName="lastName" required="" [formControl]="valForm.controls['lastName']" />
+                        <span class="text-danger" *ngIf="(valForm.controls['lastName'].hasError('rangeLength') || valForm.controls['lastName'].hasError('required')) && (valForm.controls['lastName'].dirty || valForm.controls['lastName'].touched)">Plese enter a valid Lastname</span>
                     </div>
                 </div>
 
@@ -51,22 +57,22 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>Address1</label>
-                            <input class="form-control" type="text" name="address" [(ngModel)]="user.AddressLine1"  required="" />
+                            <input class="form-control" type="text" name="address"  required="" />
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>Address2</label>
-                            <input class="form-control" type="text" name="address"  [(ngModel)]="user.AddressLine2" />
+                            <input class="form-control" type="text" name="address" />
                         </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label>City*</label>
-                        <input class="form-control" type="text" name="city" required=""  [(ngModel)]="user.City" />
+                        <input class="form-control" type="text" name="city" required="" />
                     </div>
                     <div class="form-group col-md-3">
                         <label>State*</label>
-                         <select class="form-control" [(ngModel)]="user.StateID"   name="State" id="State" placeholder="">
+                         <select class="form-control"   name="State" id="State" placeholder="">
                                <option *ngFor="let item of states; let i = index" [value]="item.StateID" [selected] = "item.StateID == user.StateID">{{item.StateCodeAndName}}</option>
                         </select>
                     </div>
@@ -74,22 +80,22 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Zip/Postal Code*</label>
-                        <input class="form-control" type="text" name="zip" required=""  [(ngModel)]="user.PostalCode" (blur)="validatePostalCode()" />                              
+                        <input class="form-control" type="text" name="zip" required=""   (blur)="lookupCityStateCounty()" />                              
                     </div>
                     <div class="form-group col-md-3">
                         <label>County</label>
-                        <input class="form-control" type="text" name="county"  [(ngModel)]="user.County"/>
+                        <input class="form-control" type="text" name="county" />
                     </div>
                     <div class="form-group col-md-3">
                         <label>Country*</label>
-                       <select class="form-control" [(ngModel)]="user.CountryID"   name="Country" id="Country" placeholder="" (change)="countryChanged()">   
-                               <option *ngFor="let item of countries; let i = index"  [value]="item.CountryID" [selected] = "item.CountryID == user.CountryID">{{item.Name}}</option>
+                       <select class="form-control"  formControlName="countryID" required="" [formControl]="valForm.controls['countryID']"  (change)="countryChanged()">   
+                               <option *ngFor="let item of countries; let i = index"  [value]="item.CountryID" [selected] = "item.CountryID ==valForm.controls['countryID'].value">{{item.Name}}</option>
                         </select>
                     </div>
                       <div class="form-group col-md-3">
                         <label>Region*</label>
-                        <select class="form-control" [(ngModel)]="user.RegionID"   name="Region" id="Region" placeholder="">  
-                               <option *ngFor="let item of regions; let i = index"  [value]="item.RegionID" [selected] = "item.NameID == user.RegionID">{{item.Name}}</option>
+                        <select class="form-control" formControlName="regionID" [formControl]="valForm.controls['regionID']" placeholder="">  
+                               <option *ngFor="let item of regions; let i = index"  [value]="item.RegionID" >{{item.Name}}</option> <!-- [selected] = "item.NameID == valForm.controls['regionID'].value"-->
                         </select>
                     </div>
                     
@@ -114,7 +120,7 @@
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label>Marketing Lead</label>
-                         <select class="form-control" [(ngModel)]="user.LeadCode"   name="LeadCode" id="LeadCode" placeholder=""> 
+                         <select class="form-control"  name="LeadCode" id="LeadCode" placeholder=""> 
                                <option *ngFor="let item of leads; let i = index"  [selected] = "item.Name == user.LeadCode">{{item.Code}}</option>
                         </select>
                     </div>
@@ -124,18 +130,18 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label>Company</label>
-                        <input class="form-control" type="text" name="company"  [(ngModel)]="user.CompanyName" />
+                        <input class="form-control" type="text" name="company" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label>Historical Customer Number </label>
-                        <input class="form-control" type="text" name="historicalcustomer"  [(ngModel)]="user.HistoricalCustNum"/>
+                        <input class="form-control" type="text" name="historicalcustomer"/>
                         <label class="checkbox-inline c-checkbox"><input id="newHistoticalCustCheckbox" type="checkbox" value="option1" /><span class="fa fa-check"></span>Choose New Historical Customer</label>
                     </div>
                     <div class="form-group col-md-4">
                         <label>PWGCC Open to Buy</label>
-                        <input class="form-control" type="text" name="pwgccopentobuy" required="" [(ngModel)]="user.PWCCOpenToBuy" />
+                        <input class="form-control" type="text" name="pwgccopentobuy" required="" />
                         <label class="checkbox-inline c-checkbox"><input id="calledForCCIncCheckbox" type="checkbox" value="option1" /><span class="fa fa-check"></span>CCalled for credit card increase?</label>
                     </div>
                 </div>
@@ -145,12 +151,12 @@
                         <label class="control-label">Are you currently in out mailing list? &nbsp;&nbsp; </label>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="true" [(ngModel)]="inMailingList" />
+                                <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="true" />
                                 <span class="fa fa-check"></span>Yes</label>
                         </div>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="false" [(ngModel)]="inMailingList" />
+                                <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="false"  />
                                 <span class="fa fa-check"></span>No</label>
                         </div>
                         <br/>
@@ -163,12 +169,12 @@
                         <label class="control-label">Is this your primary address? &nbsp;&nbsp; </label>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-primaryaddress" type="radio" name="ship-to" [value]="true" [(ngModel)]="user.IsPrimaryAddress"/>  
+                                <input id="chk-primaryaddress" type="radio" name="ship-to" [value]="true" />  
                                 <span class="fa fa-check"></span>Yes</label>
                         </div>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-primaryaddress" type="radio" name="ship-to" [value]="false" [(ngModel)]="user.IsPrimaryAddress" />
+                                <input id="chk-primaryaddress" type="radio" name="ship-to" [value]="false" />
                                 <span class="fa fa-check"></span>no</label>
                         </div>
                     </div>
@@ -182,6 +188,7 @@
                         <button style="margin-left:10px" class="btn btn-primary" type="button" (click)="stepgroup3.isOpen = true">Save </button>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </div>
