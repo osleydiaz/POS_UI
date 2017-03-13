@@ -24,6 +24,9 @@ export class CustomerComponent {
 
   user : any;
 
+  selectedRegionCountryState : any;
+  selectedState : any;
+
   inMailingList = false;
 
    prefixCodes = [];
@@ -39,14 +42,32 @@ export class CustomerComponent {
     this.initUser();
 
     this.valForm = this.fb.group({
-            bidNum: [null, CustomValidators.range([100, 999])],
-            cabin:['',this.validateCabin()],
-            folio:['',this.validateFolio()],
+            bidnum: [null, CustomValidators.range([100, 999])],
+            cabin:["",this.validateCabin()],
+            folio:["",this.validateFolio()],
             prefix: [null],
-            countryID: [null],
-            regionID:[null],
-            firstName:['',Validators.compose([Validators.required, CustomValidators.rangeLength([1, 20])])],
-            lastName:['', Validators.compose([Validators.required, CustomValidators.rangeLength([1, 20])])]
+            countryid: [null],
+            regionid:[null],
+            firstname:["",Validators.compose([Validators.required, CustomValidators.rangeLength([1, 20])])],
+            lastname:["", Validators.compose([Validators.required, CustomValidators.rangeLength([1, 20])])],
+            addressline1: ["",this.validateAddress1()],
+            addressline2: ["",Validators.compose([Validators.nullValidator, Validators.maxLength(20)])],
+            city: ["",this.validateCity()],
+            state:[""],
+            zipcode: ["",this.validatePostalCode()],
+            county:[""], //todo: needs validation
+            countrycode:["", Validators.compose([CustomValidators.number,CustomValidators.rangeLength([1, 3])])],//todo:  Make sure the combination of region/country/state is valid
+            homephone:["", Validators.compose([Validators.required,CustomValidators.number,CustomValidators.rangeLength([10, 13])])],
+            cellphone:[null, Validators.compose([CustomValidators.number,CustomValidators.rangeLength([10, 13])])],
+            leadcode:[""],
+            email:["", CustomValidators.email],
+            company:[""],
+            historicalcustomer: ["",CustomValidators.rangeLength([0, 10])],
+            pwgccopentobuy: ["",CustomValidators.range([0, 9999999.99])],            
+            pwcccall: [true],
+            mailinglist:[false],
+            primaryaddress:[true],
+            lastzipcode: ["",CustomValidators.rangeLength([0, 15])]
         });
 
 
@@ -76,14 +97,32 @@ export class CustomerComponent {
       }
 
       this.valForm.setValue({
-        bidNum: this.user.BidNum, 
-        cabin: this.user.Cabin,
-        folio:this.user.Folio,
-        prefix:this.user.Prefix,
-        countryID:this.user.CountryID,
-        regionID: this.user.RegionID,
-        firstName:this.user.FirstName,
-        lastName: this.user.LastName
+        bidnum: this.user.BidNum == null ? "" : this.user.BidNum, 
+        cabin: this.user.Cabin == null ? "" : this.user.Cabin,
+        folio:this.user.Folio == null ? "" : this.user.Folio,
+        prefix:this.user.Prefix == null ? "" : this.user.Prefix,
+        countryid:this.user.CountryID == null ? 0 : this.user.CountryID,
+        regionid: this.user.RegionID == null ?  0 : this.user.RegionID,
+        firstname:this.user.FirstName == null ? "" : this.user.FirstName,
+        lastname: this.user.LastName == null ? "" : this.user.LastName,
+        addressline1: this.user.AddressLine1 == null ? "" : this.user.AddressLine1,
+        addressline2: this.user.AddressLine2 == null ? "" : this.user.AddressLine2,
+        city: this.user.City == null ? "" : this.user.City,
+        state: this.user.State.StateID == null ? 0 : this.user.State.StateID,
+        zipcode: this.user.PostalCode == null ? "" : this.user.PostalCode,
+        county:this.user.County == null ? "" : this.user.County,
+        countrycode:this.user.PhoneCode == null ? "" : this.user.PhoneCode,
+        homephone:this.user.HomePhone == null ? "" : this.user.HomePhone,
+        cellphone:this.user.WorkPhone == null ? "" : this.user.WorkPhone,
+        leadcode:this.user.LeadCode == null ? "Ship" : this.user.LeadCode,
+        email:this.user.Email == null ? "" : this.user.Email,
+        company:this.user.CompanyName == null ? "" : this.user.CompanyName,
+        historicalcustomer:"",
+        pwcccall: this.user.PWCCCall,
+        pwgccopentobuy: this.user.PWCCOpenToBuy == null ? 0 :  this.user.PWCCOpenToBuy ,
+        mailinglist:this.user.IsExisting,
+        primaryaddress:this.user.IsPrimaryAddress,
+        lastzipcode : this.user.LastPostalCode == null ? "" : this.user.LastPostalCode
       });
 
        this.countryChanged();
@@ -117,14 +156,17 @@ export class CustomerComponent {
 
   cityStateCountyList = [];
   lookupCityStateCounty(){
+    var zipcode = this.valForm.controls["zipcode"].value.trim()
+    if(zipcode){
       this. cityStateCountyList = [];
       this.settings.spinning = false;
-      this.http.get(this.settings.apiUrl+ "customer/LookupCityStateCounty?postalCode="+this.user.PostalCode)
+      this.http.get(this.settings.apiUrl+ "customer/LookupCityStateCounty?postalCode="+zipcode)
           .subscribe(
             data => {
               this.settings.spinning = false;
               this.cityStateCountyList = data.json();
-              this.cityStateCountyModal.show();
+              if(this.cityStateCountyList.length > 0 )
+                this.cityStateCountyModal.show();
             },
             err => {
                 this.settings.spinning = false;
@@ -132,89 +174,131 @@ export class CustomerComponent {
                 alert('Error loading data')
             }
           );
+    }
+    return true;
   }
 
   countryChanged(){
-    var countryID = this.valForm.controls['countryID'].value;
-    var regionCountryState =  this.regionCountryStates.find(function(el){ return el.CountryID ==countryID });
-    this.valForm.controls['regionID'].setValue(regionCountryState.RegionID);
+    this.selectedRegionCountryState = {};
+    var countryID = this.valForm.controls['countryid'].value;
+    this.selectedRegionCountryState =  this.regionCountryStates.find(function(el){ return el.CountryID ==countryID });
+    this.valForm.controls['regionid'].setValue(this.selectedRegionCountryState.RegionID);
     //this.user.RegionID = regionCountryState.RegionID;
   }
 
-  saveCustomer(){
+saveCustomer($event, value){
 
-    var isValid = true;
+console.log($event, value);
+  //todo: LookupHistoricalCustomer
 
-     this.http.post(this.settings.apiUrl+ "auction/sellLot",JSON.stringify(this.user),this.requestOptions)
-            .subscribe(
-              data => {
-                this.settings.spinning = false;
-                var resp = data.json();
-                if(resp.Success){
-                 
-                }
-                else{
-                }                
-              },
-              err => {
-                 this.settings.spinning = false;
-              }
-            );
+   for (let c in this.valForm.controls) {
+          this.valForm.controls[c].markAsTouched();
+      }
 
+  if( this.valForm.valid){
+    //   this.http.post(this.settings.apiUrl+ "auction/sellLot",JSON.stringify(this.user),this.requestOptions)
+  //         .subscribe(
+  //           data => {
+  //             this.settings.spinning = false;
+  //             var resp = data.json();
+  //             if(resp.Success){
+                
+  //             }
+  //             else{
+  //             }                
+  //           },
+  //           err => {
+  //               this.settings.spinning = false;
+  //           }
+  //         );
+    console.log("Valid")
   }
+  
 
+};
 
-  validateCabin(): ValidatorFn {
+validateCabin(): ValidatorFn {
+  return <ValidatorFn>((control: FormControl) => {
+    if(!control.value)
+      return { 'InvalidValue': true };
+
+    if(this.settings.app.info.AuctionType != 'LAND'){
+      return control.value.length < 6 && control.value.trim().length > 0 ?  null : { 'InvalidValue': true } ;//Cabin cannot be more than 5 characters
+    }
+    else
+      return null;
+  });
+};
+
+validateFolio(): ValidatorFn {
+   var self = this;
     return <ValidatorFn>((control: FormControl) => {
       if(!control.value)
         return { 'InvalidValue': true };
 
       if(this.settings.app.info.AuctionType != 'LAND'){
-        return control.value.length < 6 && control.value.trim().length > 0 ?  null : { 'InvalidValue': control.value } ;//Cabin cannot be more than 5 characters
+        return control.value.length < 6 &&  ((self.user.HasInvoice && control.value.trim().length > 0) || !self.user.HasInvoice) ?  null : { 'InvalidValue':true} ;//Cabin cannot be more than 5 characters
       }
       else
         return null;
     });
-  }
+};
 
- validateFolio(): ValidatorFn {
-   var hasInvoice = this.user.HasInvoice;
+validateAddress1(): ValidatorFn {
+    var self = this;
     return <ValidatorFn>((control: FormControl) => {
-      if(!control.value)
-        return { 'InvalidValue': true };
+        return ( control.value.length < 36 && ((self.user.HasInvoice &&  control.value.trim().length > 0) || !self.user.HasInvoice ) && ( control.value.indexOf("P.O.") == -1 &&  control.value.indexOf("PO BOX") == -1 )) ?  null : { 'InvalidValue': true }
+    });  
+};
 
-      if(this.settings.app.info.AuctionType != 'LAND'){
-        return control.value.length < 6 &&  ((hasInvoice && control.value.trim().length > 0) || !hasInvoice) ?  null : { 'InvalidValue': control.value } ;//Cabin cannot be more than 5 characters
-      }
-      else
-        return null;
-    });
+validatePostalCode(): ValidatorFn {
+    var self = this;
+     return <ValidatorFn>((control: FormControl) => {
+        return control.value.length < 11 &&  ((self.user.HasInvoice &&  control.value.trim().length > 0) || !self.user.HasInvoice) ?  null : { 'InvalidValue': true}
+    }); 
+};
+
+validateCity(): ValidatorFn{
+   var self = this;
+    return <ValidatorFn>((control: FormControl) => {
+        return control.value.length < 31 &&  ((self.user.HasInvoice &&  control.value.trim().length > 0) || !self.user.HasInvoice) ?  null : { 'InvalidValue': true }
+    }); 
+};
+
+validateCounty(): ValidatorFn{
+
+  var stateId = this.valForm.controls['state'].value;
+  var selectedState =  this.states.find(function(el){ return el.stateId == stateId });
+  var chargeCountyTax = false;
+  if(selectedState){
+    if(selectedState.ChargeCountyTax){
+        chargeCountyTax = true;
+    }
   }
 
-  validateFirstName(){
-    return this.user.FirstName.length < 21 && this.user.FirstName.trim().length > 0;
-  }
+  return <ValidatorFn>((control: FormControl) => {
+    if(chargeCountyTax){
+        return control.value.trim().length > 0 ?  null : { 'InvalidValue': control.value }
+    }
+    else{
+      return null;
+    }  
+  }); 
+  
+};
 
-  validateLastName(){
-    return this.user.LastName.length < 21 && this.user.LastName.trim().length > 0;
-  }
 
-  validateAddress1(){
-    return this.user.AddressLine1.length < 36
-     && ((this.user.HasInvoice && this.user.AddressLine1.trim().length > 0) || !this.user.HasInvoice )
-     && (this.user.AddressLine1.indexOf("P.O.") > -1 && this.user.AddressLine1.indexOf("PO BOX") > -1 );
-  }
+selectCityStateCounty (item){
+  var rcs = this.regionCountryStates.find(function(el){ return el.StateID  == item.StateID });
+  this.valForm.controls['countryid'].setValue(rcs.CountryID);
+  this.valForm.controls['city'].setValue(item.City);
+  this.valForm.controls['state'].setValue(item.StateID);
+  this.valForm.controls['county'].setValue(item.County);
+  this.valForm.controls['zipcode'].setValue(item.PostalCode);
 
-validateAddress2(){
-    return this.user.AddressLine2.length < 36;
-  }
-
-validatePostalCode(){
-   return this.user.PostalCodeCity.length < 11 &&  ((this.user.HasInvoice && this.user.PostalCode.trim().length > 0) || !this.user.HasInvoice);
+  this.cityStateCountyModal.hide();
 }
 
-validateCity(){
-   return this.user.City.length < 31 &&  ((this.user.HasInvoice && this.user.City.trim().length > 0) || !this.user.HasInvoice);
-}
+//validateREgion
 
 }

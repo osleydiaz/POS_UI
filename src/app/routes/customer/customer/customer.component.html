@@ -9,12 +9,12 @@
                 <h4 class="modal-title">Classic modal</h4>
             </div>
             <div class="modal-body" >
-                <form [formGroup]="valForm"  (submit)="submitForm($event, valForm.value)" novalidate="">
+                <form [formGroup]="valForm"  (submit)="saveCustomer($event, valForm.value)" novalidate="">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Bid Num</label>
-                        <input class="form-control" formControlName="bidNum" required="" [formControl]="valForm.controls['bidNum']" />
-                        <span class="validation-error text-danger" *ngIf="valForm.controls['bidNum'].hasError('range') && (valForm.controls['bidNum'].dirty || valForm.controls['bidNum'].touched)">This field requires a range</span>
+                        <input class="form-control" formControlName="bidnum" required="" [formControl]="valForm.controls['bidnum']" />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['bidnum'].hasError('range') && (valForm.controls['bidnum'].dirty || valForm.controls['bidnum'].touched)">This field requires a range</span>
                     </div>
                     <div class="form-group col-md-3">
                         <label>Cabin</label>
@@ -43,13 +43,13 @@
                     
                     <div class="form-group  col-md-5">
                         <label>First Name*</label>
-                        <input class="form-control" type="text"  formControlName="firstName" required="" [formControl]="valForm.controls['firstName']" />
-                        <span class="text-danger" *ngIf="(valForm.controls['firstName'].hasError('rangeLength') || valForm.controls['firstName'].hasError('required'))&& (valForm.controls['firstName'].dirty || valForm.controls['firstName'].touched)">Plese enter a valid Name</span>
+                        <input class="form-control" type="text"  formControlName="firstname" required="" [formControl]="valForm.controls['firstname']" />
+                        <span class="text-danger" *ngIf="(valForm.controls['firstname'].hasError('rangeLength') || valForm.controls['firstname'].hasError('required'))&& (valForm.controls['firstname'].dirty || valForm.controls['firstname'].touched)">Plese enter a valid Name</span>
                     </div>
                         <div class="form-group col-md-5">
                         <label>Last Name*</label>
-                        <input class="form-control" type="text"  formControlName="lastName" required="" [formControl]="valForm.controls['lastName']" />
-                        <span class="text-danger" *ngIf="(valForm.controls['lastName'].hasError('rangeLength') || valForm.controls['lastName'].hasError('required')) && (valForm.controls['lastName'].dirty || valForm.controls['lastName'].touched)">Plese enter a valid Lastname</span>
+                        <input class="form-control" type="text"  formControlName="lastname" required="" [formControl]="valForm.controls['lastname']" />
+                        <span class="text-danger" *ngIf="(valForm.controls['lastname'].hasError('rangeLength') || valForm.controls['lastname'].hasError('required')) && (valForm.controls['lastname'].dirty || valForm.controls['lastname'].touched)">Plese enter a valid Lastname</span>
                     </div>
                 </div>
 
@@ -57,46 +57,54 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>Address1</label>
-                            <input class="form-control" type="text" name="address"  required="" />
+                            <input class="form-control" type="text"   formControlName="addressline1" required="" [formControl]="valForm.controls['addressline1']"/>
+                            <span class="validation-error text-danger" *ngIf="valForm.controls['addressline1'].hasError('InvalidValue') && (valForm.controls['addressline1'].dirty || valForm.controls['addressline1'].touched)">Please enter a valid address</span>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="form-group">
-                            <label>Address2</label>
-                            <input class="form-control" type="text" name="address" />
+                             <label>Address2</label>
+                            <input class="form-control" type="text"   formControlName="addressline2" required="" [formControl]="valForm.controls['addressline2']"/>
+                            <span class="validation-error text-danger" *ngIf="valForm.controls['addressline2'].hasError('maxLength') && (valForm.controls['addressline2'].dirty || valForm.controls['addressline2'].touched)">Please enter a valid address line 2</span>
                         </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label>City*</label>
-                        <input class="form-control" type="text" name="city" required="" />
+                        <input class="form-control" type="text"  formControlName="city" required="" [formControl]="valForm.controls['city']" />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['city'].hasError('InvalidValue') && (valForm.controls['city'].dirty || valForm.controls['city'].touched)">Please enter a valid city</span>
                     </div>
                     <div class="form-group col-md-3">
                         <label>State*</label>
-                         <select class="form-control"   name="State" id="State" placeholder="">
-                               <option *ngFor="let item of states; let i = index" [value]="item.StateID" [selected] = "item.StateID == user.StateID">{{item.StateCodeAndName}}</option>
+                         <select class="form-control"  formControlName="state" required="" [formControl]="valForm.controls['state']">
+                               <option *ngFor="let item of states; let i = index" [value]="item.StateID" >{{item.StateCodeAndName}}</option> <!--[selected] = "item.StateID == user.StateID" -->
                         </select>
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['state'].hasError('InvalidValue') && (valForm.controls['state'].dirty || valForm.controls['state'].touched)">Please enter a valid state</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label>Zip/Postal Code*</label>
-                        <input class="form-control" type="text" name="zip" required=""   (blur)="lookupCityStateCounty()" />                              
+                        <input class="form-control" type="text"  formControlName="zipcode" required="" [formControl]="valForm.controls['zipcode']"  (blur)="lookupCityStateCounty()" />   
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['zipcode'].hasError('InvalidValue') && (valForm.controls['zipcode'].dirty || valForm.controls['zipcode'].touched)">Please enter a valid zipcode</span>                           
                     </div>
                     <div class="form-group col-md-3">
                         <label>County</label>
-                        <input class="form-control" type="text" name="county" />
+                        <input class="form-control" type="text" formControlName="county" [formControl]="valForm.controls['county']" />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['county'].hasError('InvalidValue') && (valForm.controls['county'].dirty || valForm.controls['county'].touched)">Please enter a valid county</span>
                     </div>
                     <div class="form-group col-md-3">
                         <label>Country*</label>
-                       <select class="form-control"  formControlName="countryID" required="" [formControl]="valForm.controls['countryID']"  (change)="countryChanged()">   
-                               <option *ngFor="let item of countries; let i = index"  [value]="item.CountryID" [selected] = "item.CountryID ==valForm.controls['countryID'].value">{{item.Name}}</option>
+                       <select class="form-control"  formControlName="countryid" required="" [formControl]="valForm.controls['countryid']"  (change)="countryChanged()">   
+                               <option *ngFor="let item of countries; let i = index"  [value]="item.CountryID" [selected] = "item.CountryID ==valForm.controls['countryid'].value">{{item.Name}}</option>
                         </select>
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['countryid'].hasError('InvalidValue') && (valForm.controls['countryid'].dirty || valForm.controls['countryid'].touched)">Please enter a valid city</span>
                     </div>
                       <div class="form-group col-md-3">
                         <label>Region*</label>
-                        <select class="form-control" formControlName="regionID" [formControl]="valForm.controls['regionID']" placeholder="">  
+                        <select class="form-control" formControlName="regionid" [formControl]="valForm.controls['regionid']" placeholder="">  
                                <option *ngFor="let item of regions; let i = index"  [value]="item.RegionID" >{{item.Name}}</option> <!-- [selected] = "item.NameID == valForm.controls['regionID'].value"-->
                         </select>
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['regionid'].hasError('InvalidValue') && (valForm.controls['regionid'].dirty || valForm.controls['regionid'].touched)">Please enter a valid region</span>
                     </div>
                     
                 </div>
@@ -106,43 +114,54 @@
                  <div class="row">
                      <div class="form-group col-md-2">
                         <label>Country Code</label>
-                        <input class="form-control" type="text" name="countrycode" />
+                        <input class="form-control" type="text"  formControlName="countrycode" required="" [formControl]="valForm.controls['countrycode']" />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['countrycode'].hasError('rangeLength') && (valForm.controls['countrycode'].dirty || valForm.controls['countrycode'].touched)">Please enter a valid country code</span>
                     </div>
                     <div class="form-group col-md-5">
                         <label>Home Phone*</label>
-                        <input class="form-control" type="text" name="homephone" required="" />
+                        <input class="form-control" type="text" formControlName="homephone" required="" [formControl]="valForm.controls['homephone']"  />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['homephone'].hasError('rangeLength') && (valForm.controls['homephone'].dirty || valForm.controls['homephone'].touched)">Please enter a valid homephone</span>
                     </div>
                       <div class="form-group col-md-5">
                         <label>Mobile Phone</label>
-                        <input class="form-control" type="text" name="cellphone" />
+                        <input class="form-control" type="text"  formControlName="cellphone" [formControl]="valForm.controls['cellphone']"  />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['cellphone'].hasError('rangeLength') && (valForm.controls['cellphone'].dirty || valForm.controls['cellphone'].touched)">Please enter a valid homephone</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label>Marketing Lead</label>
-                         <select class="form-control"  name="LeadCode" id="LeadCode" placeholder=""> 
+                         <select class="form-control"   formControlName="leadcode" [formControl]="valForm.controls['leadcode']" > 
                                <option *ngFor="let item of leads; let i = index"  [selected] = "item.Name == user.LeadCode">{{item.Code}}</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Email Address*</label>
-                        <input class="form-control" type="text" name="email" required="" />
+                        <input class="form-control" type="text"  formControlName="email" required="" [formControl]="valForm.controls['email']"  />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['email'].hasError('email') && (valForm.controls['email'].dirty || valForm.controls['email'].touched)">Please enter a valid email</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Company</label>
-                        <input class="form-control" type="text" name="company" />
+                        <input class="form-control" type="text"  formControlName="company" required="" [formControl]="valForm.controls['company']"  />
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['company'].hasError('InvalidValue') && (valForm.controls['company'].dirty || valForm.controls['company'].touched)">Please enter a valid company</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label>Historical Customer Number </label>
-                        <input class="form-control" type="text" name="historicalcustomer"/>
-                        <label class="checkbox-inline c-checkbox"><input id="newHistoticalCustCheckbox" type="checkbox" value="option1" /><span class="fa fa-check"></span>Choose New Historical Customer</label>
+                        <input class="form-control" type="text" formControlName="historicalcustomer" [formControl]="valForm.controls['historicalcustomer']" />
+                        <label class="checkbox-inline c-checkbox">
+                            <input id="newHistoticalCustCheckbox" type="checkbox"   /><span class="fa fa-check"></span>Choose New Historical Customer
+                        </label>
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['historicalcustomer'].hasError('rangeLength') && (valForm.controls['historicalcustomer'].dirty || valForm.controls['historicalcustomer'].touched)">Please enter a valid city</span>
                     </div>
                     <div class="form-group col-md-4">
                         <label>PWGCC Open to Buy</label>
-                        <input class="form-control" type="text" name="pwgccopentobuy" required="" />
-                        <label class="checkbox-inline c-checkbox"><input id="calledForCCIncCheckbox" type="checkbox" value="option1" /><span class="fa fa-check"></span>CCalled for credit card increase?</label>
+                        <input class="form-control" type="text" required=""   formControlName="pwgccopentobuy" [formControl]="valForm.controls['pwgccopentobuy']" />
+                        <label class="checkbox-inline c-checkbox">
+                            <input id="calledForCCIncCheckbox" type="checkbox" /><span class="fa fa-check"></span>CCalled for credit card increase?
+                        </label>
+                        <span class="validation-error text-danger" *ngIf="valForm.controls['pwgccopentobuy'].hasError('rangeLength') && (valForm.controls['pwgccopentobuy'].dirty || valForm.controls['pwgccopentobuy'].touched)">Please enter credit increase</span>
                     </div>
                 </div>
                 <br/>
@@ -151,30 +170,31 @@
                         <label class="control-label">Are you currently in out mailing list? &nbsp;&nbsp; </label>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="true" />
+                                <input id="chk-mailinglist" type="radio" formControlName="mailinglist" [formControl]="valForm.controls['mailinglist']"  [value]="true" />
                                 <span class="fa fa-check"></span>Yes</label>
                         </div>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-mailinglist" type="radio" name="mailinglist" [value]="false"  />
+                                <input id="chk-mailinglist" type="radio" formControlName="mailinglist" [formControl]="valForm.controls['mailinglist']" [value]="false"  />
                                 <span class="fa fa-check"></span>No</label>
                         </div>
                         <br/>
                         <div [hidden]="!inMailingList">
                             <small style="padding-top: 8px;" class="pull-left">Have you changed your address in the last 24 months? What was your last </small>
-                            <input class="form-control pull-left" type="text" placeholder="Zip Code" style="width:100px;" />
+                            <input class="form-control pull-left" type="text" placeholder="Zip Code" style="width:100px;"  formControlName="lastzipcode" [formControl]="valForm.controls['lastzipcode']" />
+                            <span class="validation-error text-danger" *ngIf="valForm.controls['lastzipcode'].hasError('rangeLength') && (valForm.controls['lastzipcode'].dirty || valForm.controls['lastzipcode'].touched)">Please enter a valid zip code</span>
                         </div>
                     </div>
                       <div class="col-md-6">
                         <label class="control-label">Is this your primary address? &nbsp;&nbsp; </label>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-primaryaddress" type="radio" name="ship-to" [value]="true" />  
+                                <input id="chk-primaryaddress" type="radio" formControlName="primaryaddress" [formControl]="valForm.controls['primaryaddress']" [value]="true" />  
                                 <span class="fa fa-check"></span>Yes</label>
                         </div>
                         <div class="radio-inline c-radio">
                             <label>
-                                <input id="chk-primaryaddress" type="radio" name="ship-to" [value]="false" />
+                                <input id="chk-primaryaddress" type="radio" formControlName="primaryaddress" [formControl]="valForm.controls['primaryaddress']" [value]="false" />
                                 <span class="fa fa-check"></span>no</label>
                         </div>
                     </div>
@@ -185,7 +205,7 @@
                     </p>
                     <div class="pull-right">
                         <button class="btn btn-danger" type="button" (click)="classicModal.hide()">Cancel</button>
-                        <button style="margin-left:10px" class="btn btn-primary" type="button" (click)="stepgroup3.isOpen = true">Save </button>
+                        <button style="margin-left:10px" class="btn btn-primary" type="submit">Save </button>
                     </div>
                 </div>
                 </form>
@@ -220,7 +240,7 @@
                             <td>{{item.City}}</td>
                             <td>{{item.State.Code}}</td>
                             <td>{{item.County}}</td>
-                            <td class="text-center"><button class="btn btn-sm btn-primary"> Select </button></td>
+                            <td class="text-center"><button class="btn btn-sm btn-primary" (click)="selectCityStateCounty(item)"> Select </button></td>
                         </tr>
                     </tbody>
                 </table>
