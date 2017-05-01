@@ -13,3 +13,12 @@
     min-width:auto;
     width:auto;
 }
+
+.modal-content {
+    top: 40px;
+    height: calc(100vh - 100px);
+}
+
+.modal-body {
+      height: calc(100vh - 150px);
+}

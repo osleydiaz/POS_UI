@@ -8,7 +8,7 @@
         <input class="mb form-control" placeholder="Filter..." type="text" (keyup)="onQuickFilterChanged($event)" />
     </div>
     <div class="col-lg-4 col-md-4 pull-right">
-        <button class="btn btn-sm btn-default pull-right"  type="submit" (keyup)="onQuickFilterChanged($event)" ><i class="fa fa-user-plus"></i> Add User </button>
+        <button class="btn btn-sm btn-default pull-right"  type="submit" (click)="customer.show(null)" ><i class="fa fa-user-plus"></i> Add User </button>
     </div>
 </div>
 <ag-grid-ng2 #agGrid class="ag-angle" style="width: 100%; height: calc(100vh - 300px)" 
@@ -17,4 +17,4 @@
 (cellDoubleClicked)="cellDoubleClicked($event);customer.show($event.data)"
 (selectionChanged) = 'onSelectionChanged($event)' enableFilter></ag-grid-ng2>
 
-<app-customer #customer></app-customer>
+<app-customer #customer (onCustomerSaved)="getCustomers()"></app-customer>

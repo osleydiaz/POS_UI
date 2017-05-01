@@ -2,6 +2,10 @@ import { Component, ViewChild} from '@angular/core';
 import { GridOptions } from 'ag-grid/main';
 import { Http } from '@angular/http';
 
+
+import { SettingsService } from '../../../core/settings/settings.service';
+import {InvoiceService} from '../../../core/api/invoice.service'
+
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
@@ -49,7 +53,7 @@ export class InvoiceComponent {
          {headerName: 'Frame Code',field: 'frameCode',width: 100}
     ];  
 
-    constructor(http: Http) {     
+    constructor(http: Http,private settings:SettingsService, private service:InvoiceService) {     
 
         this.gridOptions = <GridOptions>{
             columnDefs: this.columnDefsFilter,
@@ -65,24 +69,20 @@ export class InvoiceComponent {
                 });
             }
         };
-      
-      
     }
 
   show(invoice){
+
      this.invoiceStep = 1;
-      this.invoice = invoice;
+     this.invoice = invoice;
 
-        
-      this.gridOptions.api.setRowData(invoice.items);
-      this.gridOptions.api.sizeColumnsToFit();
-
-      this.invoiceModal.show();
+     this.loadLineItems(invoice.InvoiceID) ;
+     
+     this.invoiceModal.show();
   }
 
   showPayment(){
     this.invoiceStep = 2;
-
   }
 
   showDetails(){
@@ -99,8 +99,23 @@ export class InvoiceComponent {
 
   }
 
-
-
+  loadLineItems(invoiceId){
+     var self =this;
+        self.settings.spinning = true;
+        this.service.getLineItems(
+            invoiceId,
+            function(data){
+                self.settings.spinning = false;
+                //self.selectedItem = data[0];
+                self.gridOptions.api.setRowData(data);
+                self.gridOptions.api.sizeColumnsToFit();
+            },
+            function(error){
+                self.settings.spinning = false;
+                console.log(error); //log error
+            }
+        );
+  }
 
   //payment data 
 paymentModalTitle = "Add Payment";

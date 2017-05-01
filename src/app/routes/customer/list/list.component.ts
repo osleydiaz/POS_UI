@@ -114,6 +114,7 @@ export class ListComponent implements OnInit, OnDestroy {
                 );
     }
 
+   
     ngOnDestroy() {
         this.$win.off(this.resizeEvent);
     }

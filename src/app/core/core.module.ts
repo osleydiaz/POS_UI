@@ -5,6 +5,11 @@ import { ThemesService } from './themes/themes.service';
 import { TranslatorService } from './translator/translator.service';
 import { MenuService } from './menu/menu.service';
 
+import { CustomerService } from './api/customer.service';
+import { BrochureService } from './api/brochure.service';
+import { InvoiceService } from './api/invoice.service';
+
+
 import { throwIfAlreadyLoaded } from './module-import-guard';
 
 @NgModule({
@@ -14,7 +19,10 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
         SettingsService,
         ThemesService,
         TranslatorService,
-        MenuService
+        MenuService,
+        CustomerService,
+        BrochureService,
+        InvoiceService
     ],
     declarations: [
     ],

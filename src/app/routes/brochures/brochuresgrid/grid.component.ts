@@ -1,6 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy,ViewChild } from '@angular/core';
 import { GridOptions } from 'ag-grid/main';
 import { Http } from '@angular/http';
+import { SettingsService } from '../../../core/settings/settings.service';
+import { BrochureService } from '../../../core/api/brochure.service';
 
 //import {GalleryItemComponent} from '../galleryitem/item.component';
 
@@ -14,6 +16,8 @@ declare var $: any;
 })
 export class BrochuresGridComponent implements OnInit, OnDestroy {
 
+    @ViewChild('brochureModal') brochureModal ;
+
     resizeEvent = 'resize.ag-grid';
     $win = $(window);
 
@@ -22,10 +26,10 @@ export class BrochuresGridComponent implements OnInit, OnDestroy {
 
     isAvailableRenderer = function(params) {
         var isFileAvailable = params.value;
-        if(isFileAvailable)
-            return "<i class='fa fa-check text-success'></i>";
+        if(isFileAvailable == 'No')
+            return "<div style='width:100%;text-align:center'><i class='fa fa-close text-danger'></i></div>"        
         else
-            return "<i class='fa fa-close text-danger'></i>"
+            return "style='width:100%;text-align:center'<i class='fa fa-check text-success'></i></div>";
     };
 
     columnDefsFilter = [ 
@@ -35,7 +39,7 @@ export class BrochuresGridComponent implements OnInit, OnDestroy {
     ];  
 
     selectedItem = {PDFName:""};
-    constructor(http: Http) {     
+    constructor(http: Http,private settings:SettingsService,private service:BrochureService) {     
 
         this.gridOptions = <GridOptions>{
             columnDefs: this.columnDefsFilter,
@@ -53,16 +57,7 @@ export class BrochuresGridComponent implements OnInit, OnDestroy {
             }
         };
       
-    
-        http.get('assets/server/ag-brochures.json')
-            .subscribe((data) => {
-                var list = data.json();
-                if(list.length > 0){
-                    this.selectedItem = list[0];
-                    this.gridOptions.api.setRowData(list);
-                    this.gridOptions.api.sizeColumnsToFit();
-                }
-            });
+        this.loadBrochures();
     }
 
      private onQuickFilterChanged($event) {
@@ -76,18 +71,36 @@ export class BrochuresGridComponent implements OnInit, OnDestroy {
         this.$win.off(this.resizeEvent);
     }
 
+    loadBrochures(){
+        var self =this;
+        self.settings.spinning = true;
+        this.service.getPromotionBrochures(
+            function(data){
+                self.settings.spinning = false;
+                self.selectedItem = data[0];
+                self.gridOptions.api.setRowData(data);
+                self.gridOptions.api.sizeColumnsToFit();
+            },
+            function(error){
+                self.settings.spinning = false;
+                console.log(error); //log error
+            }
+        );
+    }
+
     cellDoubleClicked($event){
-       console.log($event.data);
+       var brochurePdf = document.getElementById('brochurePdf');
+       brochurePdf.setAttribute('src', "pwgassets/brochures/"+$event.data.PDFName + '.pdf');
+       this.brochureModal.show();
+         //window.open("pwgassets/brochures/"+$event.data.PDFName + '.pdf');
     }
 
     onSelectionChanged = function($event) {
-        var selectedRows =  this.gridOptions.api.getSelectedRows();
-        if(selectedRows.length > 0){
-             this.selectedItem = selectedRows[0];
-                var brochurePdf = document.getElementById('brochurePdf');
-                brochurePdf.setAttribute('src', 'pwgassets/brochures/'+ this.selectedItem.PDFName);
-
-            // window.open( "pwgassets/brochures/"+ this.selectedItem.PDFName);
-        }
+        // var selectedRows =  this.gridOptions.api.getSelectedRows();
+        // if(selectedRows.length > 0){
+        //      this.selectedItem = selectedRows[0];
+        //         var brochurePdf = document.getElementById('brochurePdf');
+        //         brochurePdf.setAttribute('src', 'pwgassets/brochures/'+ this.selectedItem.PDFName);
+        // }
     }
 }

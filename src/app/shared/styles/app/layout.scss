@@ -65,10 +65,10 @@ app-root, .wrapper {
     // visibility: hidden;
     position: absolute;
     width: $aside-wd;
-
     top: 0; left: 0;
     bottom: 0;
-    z-index: $z-index-main-section + 5;
+    //z-index:201;
+     z-index: $z-index-main-section + 5;
     // @include transition(visibility 0s linear .3s);
     @include backface-visibility(hidden);
     background-color: $aside-bg;

@@ -15,7 +15,7 @@ export class AuctionComponent implements OnInit {
   lotIndex = 0;
   lots = [];
   allLots = [];
-  lot = {LotID:0,Artist:{},SerNum:"",RegNum:"",IsPieceSold:false,IsPiecePriced:false,IsPieceBackOrdered:false,LowestSellingPriceCalculated:0,ArtDescription:{},ArtistDescription:{},StockCode:{},Artwork:{}};
+  lot = {LotID:0,LotType:'',Noframe : false,Artist:{},SerNum:"",RegNum:"",IsPieceSold:false,IsPiecePriced:false,IsPieceBackOrdered:false,LowestSellingPriceCalculated:0,ArtDescription:{},ArtistDescription:{},StockCode:{},Artwork:{},AboveReserveCalculated : 0,HighestAuctionPrice:0};
   searchRegNum = "";
   searchArtist = "";
   searchBountyOnly = false;
@@ -24,6 +24,7 @@ export class AuctionComponent implements OnInit {
   hammerPrice = "";
   bidNum = "";
   framed = false;
+  framedEnabled = false;
   bidderLastName = "";
   bidderName = "";
 
@@ -120,6 +121,29 @@ export class AuctionComponent implements OnInit {
     this.filterLots();
   }
 
+  bidderNumberChanged(){
+    if(this.bidNum.length == 3){
+       this.http.get(this.settings.apiUrl+ "auction/LookupBidderName?bidNum="+this.bidNum)
+            .subscribe(
+              data => {
+                this.settings.spinning = false;
+                var bidderData= data.json();
+                if(bidderData){
+                  if(bidderData.CustomerID > 0){
+                    this.bidderName = bidderData.FirstName;
+                    this.bidderLastName = bidderData.LastName;
+                  }
+                }
+              },
+              err => {
+                 this.settings.spinning = false;
+                 //todo: show error 
+                 alert('Error loading data')
+              }
+            );
+    }
+  }
+
   private filterLots(){
      this.lotIndex = 0;
 
@@ -179,6 +203,8 @@ export class AuctionComponent implements OnInit {
 
   private getLot(){
 
+    this.clearBid();
+
     if(!this.lots[this.lotIndex]){
       //todo: error
       alert("Error showing result");
@@ -196,6 +222,8 @@ export class AuctionComponent implements OnInit {
                 this.lot= data.json();
 
                 this.getPriceLevels(lotId);
+                this.bindFramedRadioButton();
+                this.bindPrice();
               },
               err => {
                    this.settings.spinning = false;
@@ -223,10 +251,57 @@ private getPriceLevels(lotId){
                     alert('Error Loading Lot')
               }
             );
-
   }
 
-  sortLots(){
+private bindFramedRadioButton(){
+
+        switch (this.lot.LotType)
+            {
+                case "CP":
+                    this.framed = true;
+                    this.framedEnabled = false;
+                    break;
+                case "REG":
+                    if (this.settings.app.info.AllFramed == true && this.lot.Noframe == false)
+                    {
+                        this.framed = true;
+                        this.framedEnabled = false;
+                    }
+                    else
+                    {
+                        this.framed = false;
+                         this.framedEnabled = false;
+                    }
+                    break;
+                case "TO":
+                    this.framed = true;
+                    this.framedEnabled = false;
+                    break;
+                case "PRM":
+                    this.framed  = false;
+                   this.framedEnabled = true;
+                    break;
+                case "EG":
+                    this.framed = true;
+                    this.framedEnabled = true;
+                    break;
+            }
+
+} 
+
+private bindPrice(){
+
+   if (this.lot.LotType  == "BIN")
+    {
+        this.hammerPrice = this.lot.AboveReserveCalculated.toString();
+    }
+    else
+    {
+        this.hammerPrice = this.lot.HighestAuctionPrice.toString();
+    }
+}
+
+ private sortLots(){
     switch (this.sortBy) {
       case "Artist":
         this.lots.sort((l1,l2)=> l1.Artist.Code > l2.Artist.Code ? 1 : -1);
@@ -325,7 +400,6 @@ private getPriceLevels(lotId){
                 var resp = data.json();
                 if(resp.Success){
                    this.showMessage("Success","The sale has been successfully processed.");
-                   this.clearBid();
                    this. getLot();
                 }
                 else{
